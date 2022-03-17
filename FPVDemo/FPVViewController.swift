@@ -21,6 +21,10 @@ class FPVViewController: UIViewController,  DJIVideoFeedListener, DJISDKManagerD
     @IBOutlet var workModeSegmentControl: UISegmentedControl!
     @IBOutlet var fpvView: UIView!
     
+    // MARK: Controllers that manage functionality
+    private var modelDataHandler: ModelDataHandler? =
+      ModelDataHandler(modelFileInfo: MobileNetSSD.modelInfo, labelsFileInfo: MobileNetSSD.labelsInfo)
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
