@@ -52,6 +52,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		5397110A27E3C05A00FC8253 /* ModelDataHandler */ = {
+			isa = PBXGroup;
+			children = (
+				53F09F9F27DD5D340054E5E7 /* ModelDataHandler.swift */,
+			);
+			path = ModelDataHandler;
+			sourceTree = "<group>";
+		};
 		53F09F9C27DD58630054E5E7 /* Model */ = {
 			isa = PBXGroup;
 			children = (
@@ -74,7 +82,6 @@
 		86985CC01E834EC200577EC7 = {
 			isa = PBXGroup;
 			children = (
-				53F09FA127DDEF1B0054E5E7 /* Extensions */,
 				A4FA8DDD1F6BDD8000EBD60F /* FPVDemo */,
 				86985CCA1E834EC200577EC7 /* Products */,
 				AAA999D36AC3D78C0B5ABFB0 /* Pods */,
@@ -93,6 +100,8 @@
 		A4FA8DDD1F6BDD8000EBD60F /* FPVDemo */ = {
 			isa = PBXGroup;
 			children = (
+				53F09FA127DDEF1B0054E5E7 /* Extensions */,
+				5397110A27E3C05A00FC8253 /* ModelDataHandler */,
 				53F09F9C27DD58630054E5E7 /* Model */,
 				A4FA8DDE1F6BDD8000EBD60F /* AppDelegate.swift */,
 				A4FA8DDF1F6BDD8000EBD60F /* Assets.xcassets */,
@@ -100,7 +109,6 @@
 				A4FA8DE21F6BDD8000EBD60F /* Main.storyboard */,
 				A4FA8DE41F6BDD8000EBD60F /* FPVViewController.swift */,
 				A4FA8DE51F6BDD8000EBD60F /* Info.plist */,
-				53F09F9F27DD5D340054E5E7 /* ModelDataHandler.swift */,
 			);
 			path = FPVDemo;
 			sourceTree = "<group>";
