@@ -11,6 +11,7 @@
 		53F09FA527DDEF6E0054E5E7 /* UIColorExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53F09FA227DDEF6E0054E5E7 /* UIColorExtension.swift */; };
 		53F09FA627DDEF6E0054E5E7 /* StringExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53F09FA327DDEF6E0054E5E7 /* StringExtension.swift */; };
 		53F09FA727DDEF6E0054E5E7 /* CVPixelBufferExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53F09FA427DDEF6E0054E5E7 /* CVPixelBufferExtension.swift */; };
+		53FF154727E715B7003BDB60 /* OverlayView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53FF154627E715B7003BDB60 /* OverlayView.swift */; };
 		6AAFD9C32A1807360F059973 /* Pods_DroneMLSwift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5D3D519A95DD58BAA864496A /* Pods_DroneMLSwift.framework */; };
 		A4FA8DE61F6BDD8000EBD60F /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4FA8DDE1F6BDD8000EBD60F /* AppDelegate.swift */; };
 		A4FA8DE71F6BDD8000EBD60F /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A4FA8DDF1F6BDD8000EBD60F /* Assets.xcassets */; };
@@ -27,6 +28,7 @@
 		53F09FA227DDEF6E0054E5E7 /* UIColorExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIColorExtension.swift; sourceTree = "<group>"; };
 		53F09FA327DDEF6E0054E5E7 /* StringExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StringExtension.swift; sourceTree = "<group>"; };
 		53F09FA427DDEF6E0054E5E7 /* CVPixelBufferExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CVPixelBufferExtension.swift; sourceTree = "<group>"; };
+		53FF154627E715B7003BDB60 /* OverlayView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OverlayView.swift; sourceTree = "<group>"; };
 		5D3D519A95DD58BAA864496A /* Pods_DroneMLSwift.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_DroneMLSwift.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		86985CC91E834EC200577EC7 /* DroneMLSwift.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = DroneMLSwift.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		A4FA8DDE1F6BDD8000EBD60F /* AppDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -79,6 +81,14 @@
 			path = Extensions;
 			sourceTree = "<group>";
 		};
+		53FF154527E71577003BDB60 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				53FF154627E715B7003BDB60 /* OverlayView.swift */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
 		86985CC01E834EC200577EC7 = {
 			isa = PBXGroup;
 			children = (
@@ -100,6 +110,7 @@
 		A4FA8DDD1F6BDD8000EBD60F /* FPVDemo */ = {
 			isa = PBXGroup;
 			children = (
+				53FF154527E71577003BDB60 /* Views */,
 				53F09FA127DDEF1B0054E5E7 /* Extensions */,
 				5397110A27E3C05A00FC8253 /* ModelDataHandler */,
 				53F09F9C27DD58630054E5E7 /* Model */,
@@ -258,6 +269,7 @@
 			files = (
 				A4FA8DE61F6BDD8000EBD60F /* AppDelegate.swift in Sources */,
 				A4FA8DEA1F6BDD8000EBD60F /* FPVViewController.swift in Sources */,
+				53FF154727E715B7003BDB60 /* OverlayView.swift in Sources */,
 				53F09FA627DDEF6E0054E5E7 /* StringExtension.swift in Sources */,
 				53F09FA027DD5D340054E5E7 /* ModelDataHandler.swift in Sources */,
 				53F09FA527DDEF6E0054E5E7 /* UIColorExtension.swift in Sources */,

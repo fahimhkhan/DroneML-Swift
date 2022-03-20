@@ -19,8 +19,16 @@ class FPVViewController: UIViewController,  DJIVideoFeedListener, DJISDKManagerD
     @IBOutlet var captureButton: UIButton!
     @IBOutlet var recordButton: UIButton!
     @IBOutlet var workModeSegmentControl: UISegmentedControl!
-    @IBOutlet var fpvView: UIView!
+    @IBOutlet var fpvView: OverlayView!
+    //@IBOutlet weak var overlayView: OverlayView!
     
+    // MARK: Constants
+    private let displayFont = UIFont.systemFont(ofSize: 14.0, weight: .medium)
+    private let edgeOffset: CGFloat = 2.0
+    private let labelOffset: CGFloat = 10.0
+
+    // Holds the results at any time
+    private var result: Result?
     // MARK: Controllers that manage functionality
     private var modelDataHandler: ModelDataHandler? =
       ModelDataHandler(modelFileInfo: MobileNetSSD.modelInfo, labelsFileInfo: MobileNetSSD.labelsInfo)
@@ -28,6 +36,9 @@ class FPVViewController: UIViewController,  DJIVideoFeedListener, DJISDKManagerD
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        //guard modelDataHandler != nil else {
+        // fatalError("Failed to load model")
+        //}
         DJISDKManager.registerApp(with: self)
         recordTimeLabel.isHidden = true
     }
@@ -260,5 +271,82 @@ class FPVViewController: UIViewController,  DJIVideoFeedListener, DJISDKManagerD
     func decodingDidFail() {
         DJISDKManager.videoFeeder()?.primaryVideoFeed.decodingDidFail()
     }
+    
+    @objc  func runModel(onPixelBuffer pixelBuffer: CVPixelBuffer) {
+
+      // Run the live camera pixelBuffer through tensorFlow to get the result
+
+      result = self.modelDataHandler?.runModel(onFrame: pixelBuffer)
+
+      guard let displayResult = result else {
+        return
+      }
+
+      let width = CVPixelBufferGetWidth(pixelBuffer)
+      let height = CVPixelBufferGetHeight(pixelBuffer)
+
+      DispatchQueue.main.async {
+
+        // Draws the bounding boxes and displays class names and confidence scores.
+        self.drawAfterPerformingCalculations(onInferences: displayResult.inferences, withImageSize: CGSize(width: CGFloat(width), height: CGFloat(height)))
+      }
+    }
+    
+    func drawAfterPerformingCalculations(onInferences inferences: [Inference], withImageSize imageSize:CGSize) {
+
+      self.fpvView.objectOverlays = []
+      self.fpvView.setNeedsDisplay()
+
+      guard !inferences.isEmpty else {
+        return
+      }
+
+      var objectOverlays: [ObjectOverlay] = []
+
+      for inference in inferences {
+
+        // Translates bounding box rect to current view.
+        var convertedRect = inference.rect.applying(CGAffineTransform(scaleX: self.fpvView.bounds.size.width / imageSize.width, y: self.fpvView.bounds.size.height / imageSize.height))
+
+        if convertedRect.origin.x < 0 {
+          convertedRect.origin.x = self.edgeOffset
+        }
+
+        if convertedRect.origin.y < 0 {
+          convertedRect.origin.y = self.edgeOffset
+        }
+
+        if convertedRect.maxY > self.fpvView.bounds.maxY {
+          convertedRect.size.height = self.fpvView.bounds.maxY - convertedRect.origin.y - self.edgeOffset
+        }
+
+        if convertedRect.maxX > self.fpvView.bounds.maxX {
+          convertedRect.size.width = self.fpvView.bounds.maxX - convertedRect.origin.x - self.edgeOffset
+        }
+
+        let confidenceValue = Int(inference.confidence * 100.0)
+        let string = "\(inference.className)  (\(confidenceValue)%)"
+
+        let size = string.size(usingFont: self.displayFont)
+
+        let objectOverlay = ObjectOverlay(name: string, borderRect: convertedRect, nameStringSize: size, color: inference.displayColor, font: self.displayFont)
+
+          //if inference.className == "car" || inference.className == "person"{
+        objectOverlays.append(objectOverlay)
+          //}
+      }
+
+      // Hands off drawing to the OverlayView
+      self.draw(objectOverlays: objectOverlays)
+
+    }
+    
+    func draw(objectOverlays: [ObjectOverlay]) {
+
+      self.fpvView.objectOverlays = objectOverlays
+      self.fpvView.setNeedsDisplay()
+    }
 
 }
+
+
