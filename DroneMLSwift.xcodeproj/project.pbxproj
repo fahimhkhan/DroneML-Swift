@@ -9,6 +9,8 @@
 /* Begin PBXBuildFile section */
 		53223C3027F071B70065E01C /* CameraFeedManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53223C2F27F071B70065E01C /* CameraFeedManager.swift */; };
 		53223C3227F071F50065E01C /* PreviewView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53223C3127F071F50065E01C /* PreviewView.swift */; };
+		53223C3527F073FC0065E01C /* detect.tflite in Resources */ = {isa = PBXBuildFile; fileRef = 53223C3427F073FC0065E01C /* detect.tflite */; };
+		53223C3727F074050065E01C /* labelmap.txt in Resources */ = {isa = PBXBuildFile; fileRef = 53223C3627F074050065E01C /* labelmap.txt */; };
 		53F09FA027DD5D340054E5E7 /* ModelDataHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53F09F9F27DD5D340054E5E7 /* ModelDataHandler.swift */; };
 		53F09FA527DDEF6E0054E5E7 /* UIColorExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53F09FA227DDEF6E0054E5E7 /* UIColorExtension.swift */; };
 		53F09FA627DDEF6E0054E5E7 /* StringExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53F09FA327DDEF6E0054E5E7 /* StringExtension.swift */; };
@@ -26,6 +28,8 @@
 		2337660EE5B457B2F07A1FC7 /* Pods-FPVDemo.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-FPVDemo.release.xcconfig"; path = "Target Support Files/Pods-FPVDemo/Pods-FPVDemo.release.xcconfig"; sourceTree = "<group>"; };
 		53223C2F27F071B70065E01C /* CameraFeedManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraFeedManager.swift; sourceTree = "<group>"; };
 		53223C3127F071F50065E01C /* PreviewView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreviewView.swift; sourceTree = "<group>"; };
+		53223C3427F073FC0065E01C /* detect.tflite */ = {isa = PBXFileReference; lastKnownFileType = file; path = detect.tflite; sourceTree = "<group>"; };
+		53223C3627F074050065E01C /* labelmap.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = labelmap.txt; sourceTree = "<group>"; };
 		53F09F9F27DD5D340054E5E7 /* ModelDataHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModelDataHandler.swift; sourceTree = "<group>"; };
 		53F09FA227DDEF6E0054E5E7 /* UIColorExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIColorExtension.swift; sourceTree = "<group>"; };
 		53F09FA327DDEF6E0054E5E7 /* StringExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StringExtension.swift; sourceTree = "<group>"; };
@@ -71,6 +75,15 @@
 				53223C3127F071F50065E01C /* PreviewView.swift */,
 			);
 			path = "Camera Feed";
+			sourceTree = "<group>";
+		};
+		53223C3327F073C80065E01C /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				53223C3627F074050065E01C /* labelmap.txt */,
+				53223C3427F073FC0065E01C /* detect.tflite */,
+			);
+			path = Model;
 			sourceTree = "<group>";
 		};
 		5397110A27E3C05A00FC8253 /* ModelDataHandler */ = {
@@ -125,6 +138,7 @@
 				53223C2D27F0710A0065E01C /* ViewControllers */,
 				53FF154527E71577003BDB60 /* Views */,
 				53F09FA127DDEF1B0054E5E7 /* Extensions */,
+				53223C3327F073C80065E01C /* Model */,
 				A4FA8DDE1F6BDD8000EBD60F /* AppDelegate.swift */,
 				A4FA8DDF1F6BDD8000EBD60F /* Assets.xcassets */,
 				A4FA8DE01F6BDD8000EBD60F /* LaunchScreen.storyboard */,
@@ -217,9 +231,11 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				53223C3527F073FC0065E01C /* detect.tflite in Resources */,
 				A4FA8DE91F6BDD8000EBD60F /* Main.storyboard in Resources */,
 				A4FA8DE81F6BDD8000EBD60F /* LaunchScreen.storyboard in Resources */,
 				A4FA8DE71F6BDD8000EBD60F /* Assets.xcassets in Resources */,
+				53223C3727F074050065E01C /* labelmap.txt in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

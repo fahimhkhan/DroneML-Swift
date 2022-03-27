@@ -36,9 +36,9 @@ class FPVViewController: UIViewController,  DJIVideoFeedListener, DJISDKManagerD
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        //guard modelDataHandler != nil else {
-         //fatalError("Failed to load model")
-        //}
+        guard modelDataHandler != nil else {
+         fatalError("Failed to load model")
+        }
         
         DJISDKManager.registerApp(with: self)
         recordTimeLabel.isHidden = true
