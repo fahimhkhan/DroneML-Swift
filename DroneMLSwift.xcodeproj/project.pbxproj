@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		53223C3027F071B70065E01C /* CameraFeedManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53223C2F27F071B70065E01C /* CameraFeedManager.swift */; };
+		53223C3227F071F50065E01C /* PreviewView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53223C3127F071F50065E01C /* PreviewView.swift */; };
 		53F09FA027DD5D340054E5E7 /* ModelDataHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53F09F9F27DD5D340054E5E7 /* ModelDataHandler.swift */; };
 		53F09FA527DDEF6E0054E5E7 /* UIColorExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53F09FA227DDEF6E0054E5E7 /* UIColorExtension.swift */; };
 		53F09FA627DDEF6E0054E5E7 /* StringExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53F09FA327DDEF6E0054E5E7 /* StringExtension.swift */; };
@@ -22,8 +24,8 @@
 
 /* Begin PBXFileReference section */
 		2337660EE5B457B2F07A1FC7 /* Pods-FPVDemo.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-FPVDemo.release.xcconfig"; path = "Target Support Files/Pods-FPVDemo/Pods-FPVDemo.release.xcconfig"; sourceTree = "<group>"; };
-		53F09F9D27DD58FB0054E5E7 /* labelmap.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = labelmap.txt; sourceTree = "<group>"; };
-		53F09F9E27DD59C40054E5E7 /* detect.tflite */ = {isa = PBXFileReference; lastKnownFileType = file; path = detect.tflite; sourceTree = "<group>"; };
+		53223C2F27F071B70065E01C /* CameraFeedManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraFeedManager.swift; sourceTree = "<group>"; };
+		53223C3127F071F50065E01C /* PreviewView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreviewView.swift; sourceTree = "<group>"; };
 		53F09F9F27DD5D340054E5E7 /* ModelDataHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModelDataHandler.swift; sourceTree = "<group>"; };
 		53F09FA227DDEF6E0054E5E7 /* UIColorExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIColorExtension.swift; sourceTree = "<group>"; };
 		53F09FA327DDEF6E0054E5E7 /* StringExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StringExtension.swift; sourceTree = "<group>"; };
@@ -54,21 +56,29 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		53223C2D27F0710A0065E01C /* ViewControllers */ = {
+			isa = PBXGroup;
+			children = (
+				A4FA8DE41F6BDD8000EBD60F /* FPVViewController.swift */,
+			);
+			path = ViewControllers;
+			sourceTree = "<group>";
+		};
+		53223C2E27F071840065E01C /* Camera Feed */ = {
+			isa = PBXGroup;
+			children = (
+				53223C2F27F071B70065E01C /* CameraFeedManager.swift */,
+				53223C3127F071F50065E01C /* PreviewView.swift */,
+			);
+			path = "Camera Feed";
+			sourceTree = "<group>";
+		};
 		5397110A27E3C05A00FC8253 /* ModelDataHandler */ = {
 			isa = PBXGroup;
 			children = (
 				53F09F9F27DD5D340054E5E7 /* ModelDataHandler.swift */,
 			);
 			path = ModelDataHandler;
-			sourceTree = "<group>";
-		};
-		53F09F9C27DD58630054E5E7 /* Model */ = {
-			isa = PBXGroup;
-			children = (
-				53F09F9E27DD59C40054E5E7 /* detect.tflite */,
-				53F09F9D27DD58FB0054E5E7 /* labelmap.txt */,
-			);
-			path = Model;
 			sourceTree = "<group>";
 		};
 		53F09FA127DDEF1B0054E5E7 /* Extensions */ = {
@@ -110,15 +120,15 @@
 		A4FA8DDD1F6BDD8000EBD60F /* FPVDemo */ = {
 			isa = PBXGroup;
 			children = (
+				5397110A27E3C05A00FC8253 /* ModelDataHandler */,
+				53223C2E27F071840065E01C /* Camera Feed */,
+				53223C2D27F0710A0065E01C /* ViewControllers */,
 				53FF154527E71577003BDB60 /* Views */,
 				53F09FA127DDEF1B0054E5E7 /* Extensions */,
-				5397110A27E3C05A00FC8253 /* ModelDataHandler */,
-				53F09F9C27DD58630054E5E7 /* Model */,
 				A4FA8DDE1F6BDD8000EBD60F /* AppDelegate.swift */,
 				A4FA8DDF1F6BDD8000EBD60F /* Assets.xcassets */,
 				A4FA8DE01F6BDD8000EBD60F /* LaunchScreen.storyboard */,
 				A4FA8DE21F6BDD8000EBD60F /* Main.storyboard */,
-				A4FA8DE41F6BDD8000EBD60F /* FPVViewController.swift */,
 				A4FA8DE51F6BDD8000EBD60F /* Info.plist */,
 			);
 			path = FPVDemo;
@@ -269,6 +279,8 @@
 			files = (
 				A4FA8DE61F6BDD8000EBD60F /* AppDelegate.swift in Sources */,
 				A4FA8DEA1F6BDD8000EBD60F /* FPVViewController.swift in Sources */,
+				53223C3227F071F50065E01C /* PreviewView.swift in Sources */,
+				53223C3027F071B70065E01C /* CameraFeedManager.swift in Sources */,
 				53FF154727E715B7003BDB60 /* OverlayView.swift in Sources */,
 				53F09FA627DDEF6E0054E5E7 /* StringExtension.swift in Sources */,
 				53F09FA027DD5D340054E5E7 /* ModelDataHandler.swift in Sources */,
