@@ -1,4 +1,12 @@
 //
+//  RipViewController.swift
+//  DroneMLSwift
+//
+//  Created by Fahim Hasan Khan on 3/28/22.
+//  Copyright © 2022 DJI. All rights reserved.
+//
+
+//
 //  FPVViewController.swift
 //  iOS-FPVDemo-Swift
 //
@@ -7,7 +15,7 @@ import UIKit
 import DJISDK
 import DJIWidget
 
-class FPVViewController: UIViewController,  DJIVideoFeedListener, DJISDKManagerDelegate, DJICameraDelegate, DJIVideoPreviewerFrameControlDelegate {
+class RipViewController: UIViewController,  DJIVideoFeedListener, DJISDKManagerDelegate, DJICameraDelegate, DJIVideoPreviewerFrameControlDelegate {
     
     var isRecording : Bool!
     
@@ -16,9 +24,7 @@ class FPVViewController: UIViewController,  DJIVideoFeedListener, DJISDKManagerD
     let bridgeAppIP = "10.81.52.50"
     
     @IBOutlet var recordTimeLabel: UILabel!
-    @IBOutlet var captureButton: UIButton!
     @IBOutlet var recordButton: UIButton!
-    @IBOutlet var workModeSegmentControl: UISegmentedControl!
     @IBOutlet var fpvView: PreviewView!
     @IBOutlet weak var overlayView: OverlayView!
     
@@ -56,34 +62,14 @@ class FPVViewController: UIViewController,  DJIVideoFeedListener, DJISDKManagerD
     
     func setupVideoPreviewer() {
         DJIVideoPreviewer.instance().setView(self.fpvView)
-        let product = DJISDKManager.product();
-        
-        //Use "SecondaryVideoFeed" if the DJI Product is A3, N3, Matrice 600, or Matrice 600 Pro, otherwise, use "primaryVideoFeed".
-        if ((product?.model == DJIAircraftModelNameA3)
-            || (product?.model == DJIAircraftModelNameN3)
-            || (product?.model == DJIAircraftModelNameMatrice600)
-            || (product?.model == DJIAircraftModelNameMatrice600Pro)) {
-            DJISDKManager.videoFeeder()?.secondaryVideoFeed.add(self, with: nil)
-        } else {
-            DJISDKManager.videoFeeder()?.primaryVideoFeed.add(self, with: nil)
-        }
+        DJISDKManager.videoFeeder()?.primaryVideoFeed.add(self, with: nil)
         DJIVideoPreviewer.instance().start()
         DJIVideoPreviewer.instance()?.frameControlHandler = self;
     }
     
     func resetVideoPreview() {
         DJIVideoPreviewer.instance().unSetView()
-        let product = DJISDKManager.product();
-        
-        //Use "SecondaryVideoFeed" if the DJI Product is A3, N3, Matrice 600, or Matrice 600 Pro, otherwise, use "primaryVideoFeed".
-        if ((product?.model == DJIAircraftModelNameA3)
-            || (product?.model == DJIAircraftModelNameN3)
-            || (product?.model == DJIAircraftModelNameMatrice600)
-            || (product?.model == DJIAircraftModelNameMatrice600Pro)) {
-            DJISDKManager.videoFeeder()?.secondaryVideoFeed.remove(self)
-        } else {
-            DJISDKManager.videoFeeder()?.primaryVideoFeed.remove(self)
-        }
+        DJISDKManager.videoFeeder()?.primaryVideoFeed.remove(self)
     }
     
     func fetchCamera() -> DJICamera? {
@@ -92,9 +78,6 @@ class FPVViewController: UIViewController,  DJIVideoFeedListener, DJISDKManagerD
         }
         if product is DJIAircraft {
             return (product as! DJIAircraft).camera
-        }
-        if product is DJIHandheld {
-            return (product as! DJIHandheld).camera
         }
         return nil
     }
@@ -159,6 +142,9 @@ class FPVViewController: UIViewController,  DJIVideoFeedListener, DJISDKManagerD
     func didUpdateDatabaseDownloadProgress(_ progress: Progress) {
         NSLog("Download database : \n%lld/%lld", progress.completedUnitCount, progress.totalUnitCount)
     }
+
+    //Fahim: Camera functions start here
+    
     
     // MARK: DJICameraDelegate Method
     func camera(_ camera: DJICamera, didUpdate cameraState: DJICameraSystemState) {
@@ -168,17 +154,19 @@ class FPVViewController: UIViewController,  DJIVideoFeedListener, DJISDKManagerD
         self.recordTimeLabel.text = formatSeconds(seconds: cameraState.currentVideoRecordingTimeInSeconds)
         
         if (self.isRecording == true) {
-            self.recordButton.setTitle("Stop Record", for: .normal)
+            self.recordButton.setTitle("Rip Detected!! Recording!", for: .normal)
+            self.recordButton.setTitleColor(.systemGreen, for: .normal)
         } else {
-            self.recordButton.setTitle("Start Record", for: .normal)
+            self.recordButton.setTitle("No Rip Detected!! Not Recording!", for: .normal)
+            self.recordButton.setTitleColor(.systemRed, for: .normal)
         }
         
         //Update UISegmented Control's State
-        if (cameraState.mode == DJICameraMode.shootPhoto) {
-            self.workModeSegmentControl.selectedSegmentIndex = 0
-        } else {
-            self.workModeSegmentControl.selectedSegmentIndex = 1
-        }
+        camera.setMode(DJICameraMode.recordVideo,  withCompletion: { (error) in
+            if let _ = error {
+                NSLog("Set RecordVideo Mode Error: " + String(describing: error))
+            }
+        })
     }
     
     // MARK: DJIVideoFeedListener Method
@@ -189,22 +177,6 @@ class FPVViewController: UIViewController,  DJIVideoFeedListener, DJISDKManagerD
         DJIVideoPreviewer.instance().push(videoBuffer, length: Int32(videoData.length))
     }
     
-    // MARK: IBAction Methods
-    @IBAction func captureAction(_ sender: UIButton) {
-        guard let camera = fetchCamera() else {
-            return
-        }
-        
-        camera.setMode(DJICameraMode.shootPhoto, withCompletion: {(error) in
-            DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 1){
-                camera.startShootPhoto(completion: { (error) in
-                    if let _ = error {
-                        NSLog("Shoot Photo Error: " + String(describing: error))
-                    }
-                })
-            }
-        })
-    }
     
     @IBAction func recordAction(_ sender: UIButton) {
         guard let camera = fetchCamera() else {
@@ -226,26 +198,6 @@ class FPVViewController: UIViewController,  DJIVideoFeedListener, DJISDKManagerD
         }
     }
     
-    @IBAction func workModeSegmentChange(_ sender: UISegmentedControl) {
-        guard let camera = fetchCamera() else {
-            return
-        }
-        
-       if (sender.selectedSegmentIndex == 0) {
-            camera.setMode(DJICameraMode.shootPhoto,  withCompletion: { (error) in
-                if let _ = error {
-                    NSLog("Set ShootPhoto Mode Error: " + String(describing: error))
-                }
-            })
-            
-        } else if (sender.selectedSegmentIndex == 1) {
-            camera.setMode(DJICameraMode.recordVideo,  withCompletion: { (error) in
-                if let _ = error {
-                    NSLog("Set RecordVideo Mode Error: " + String(describing: error))
-                }
-            })
-        }
-    }
     
     // MARK: DJIVideoPreviewerFrameControlDelegate Method
     func parseDecodingAssistInfo(withBuffer buffer: UnsafeMutablePointer<UInt8>!, length: Int32, assistInfo: UnsafeMutablePointer<DJIDecodingAssistInfo>!) -> Bool {
@@ -273,81 +225,4 @@ class FPVViewController: UIViewController,  DJIVideoFeedListener, DJISDKManagerD
         DJISDKManager.videoFeeder()?.primaryVideoFeed.decodingDidFail()
     }
     
-//    @objc  func runModel(onPixelBuffer pixelBuffer: CVPixelBuffer) {
-//
-//      // Run the live camera pixelBuffer through tensorFlow to get the result
-//
-//      result = self.modelDataHandler?.runModel(onFrame: pixelBuffer)
-//
-//      guard let displayResult = result else {
-//        return
-//      }
-//
-//      let width = CVPixelBufferGetWidth(pixelBuffer)
-//      let height = CVPixelBufferGetHeight(pixelBuffer)
-//
-//      DispatchQueue.main.async {
-//
-//        // Draws the bounding boxes and displays class names and confidence scores.
-//        self.drawAfterPerformingCalculations(onInferences: displayResult.inferences, withImageSize: CGSize(width: CGFloat(width), height: CGFloat(height)))
-//      }
-//    }
-//    
-//    func drawAfterPerformingCalculations(onInferences inferences: [Inference], withImageSize imageSize:CGSize) {
-//
-//      self.overlayView.objectOverlays = []
-//      self.overlayView.setNeedsDisplay()
-//
-//      guard !inferences.isEmpty else {
-//        return
-//      }
-//
-//      var objectOverlays: [ObjectOverlay] = []
-//
-//      for inference in inferences {
-//
-//        // Translates bounding box rect to current view.
-//        var convertedRect = inference.rect.applying(CGAffineTransform(scaleX: self.fpvView.bounds.size.width / imageSize.width, y: self.fpvView.bounds.size.height / imageSize.height))
-//
-//        if convertedRect.origin.x < 0 {
-//          convertedRect.origin.x = self.edgeOffset
-//        }
-//
-//        if convertedRect.origin.y < 0 {
-//          convertedRect.origin.y = self.edgeOffset
-//        }
-//
-//        if convertedRect.maxY > self.overlayView.bounds.maxY {
-//          convertedRect.size.height = self.overlayView.bounds.maxY - convertedRect.origin.y - self.edgeOffset
-//        }
-//
-//        if convertedRect.maxX > self.overlayView.bounds.maxX {
-//          convertedRect.size.width = self.overlayView.bounds.maxX - convertedRect.origin.x - self.edgeOffset
-//        }
-//
-//        let confidenceValue = Int(inference.confidence * 100.0)
-//        let string = "\(inference.className)  (\(confidenceValue)%)"
-//
-//        let size = string.size(usingFont: self.displayFont)
-//
-//        let objectOverlay = ObjectOverlay(name: string, borderRect: convertedRect, nameStringSize: size, color: inference.displayColor, font: self.displayFont)
-//
-//          //if inference.className == "car" || inference.className == "person"{
-//        objectOverlays.append(objectOverlay)
-//          //}
-//      }
-//
-//      // Hands off drawing to the OverlayView
-//      self.draw(objectOverlays: objectOverlays)
-//
-//    }
-//    
-//    func draw(objectOverlays: [ObjectOverlay]) {
-//
-//      self.overlayView.objectOverlays = objectOverlays
-//      self.overlayView.setNeedsDisplay()
-//    }
-
 }
-
-

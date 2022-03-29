@@ -52,6 +52,12 @@ class ViewController: UIViewController {
     overlayView.clearsContextBeforeDrawing = true
 
   }
+    
+  override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        cameraFeedManager.updatePreview()
+        previewView.previewLayer.frame = view.bounds
+  }
 
   override func didReceiveMemoryWarning() {
     super.didReceiveMemoryWarning()

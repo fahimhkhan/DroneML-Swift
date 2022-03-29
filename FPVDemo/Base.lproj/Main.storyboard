@@ -5,6 +5,7 @@
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="19519"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
@@ -24,10 +25,10 @@
             </objects>
             <point key="canvasLocation" x="-214" y="-52"/>
         </scene>
-        <!--View Controller-->
+        <!--Menu View Controller-->
         <scene sceneID="R1h-Xf-zFX">
             <objects>
-                <viewController id="KpA-Jp-DJ2" sceneMemberID="viewController">
+                <viewController title="Menu View Controller" id="KpA-Jp-DJ2" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="cHa-KL-vGx"/>
                         <viewControllerLayoutGuide type="bottom" id="EYE-Yc-SOh"/>
@@ -66,7 +67,7 @@
         <!--FPV View Controller-->
         <scene sceneID="h7h-rr-pPd">
             <objects>
-                <viewController title="FPV View Controller" id="Y5h-KL-TjC" customClass="FPVViewController" customModule="DroneMLSwift" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController title="FPV View Controller" id="Y5h-KL-TjC" customClass="RipViewController" customModule="DroneMLSwift" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="oFq-A1-eWo"/>
                         <viewControllerLayoutGuide type="bottom" id="eiZ-M7-BsQ"/>
@@ -75,8 +76,13 @@
                         <rect key="frame" x="0.0" y="0.0" width="896" height="414"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="e7o-PK-R6D">
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="e7o-PK-R6D" customClass="PreviewView" customModule="DroneMLSwift" customModuleProvider="target">
                                 <rect key="frame" x="40" y="24" width="816" height="369"/>
+                                <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.0" colorSpace="custom" customColorSpace="sRGB"/>
+                            </view>
+                            <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="fsT-Dz-H68" customClass="OverlayView" customModule="DroneMLSwift" customModuleProvider="target">
+                                <rect key="frame" x="40" y="22" width="816" height="369"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.0" colorSpace="custom" customColorSpace="sRGB"/>
                             </view>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="00:00" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="WvS-Bv-OaZ">
@@ -88,109 +94,41 @@
                                 <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Nm0-qQ-Lf7">
-                                <rect key="frame" x="0.0" y="336" width="856" height="57"/>
-                                <subviews>
-                                    <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="hfh-HM-hBW">
-                                        <rect key="frame" x="615" y="15" width="189" height="32"/>
-                                        <constraints>
-                                            <constraint firstAttribute="width" constant="189" id="VW6-r4-jrR"/>
-                                        </constraints>
-                                        <segments>
-                                            <segment title="CaptureMode"/>
-                                            <segment title="RecordMode"/>
-                                        </segments>
-                                        <connections>
-                                            <action selector="workModeSegmentChange:" destination="Y5h-KL-TjC" eventType="valueChanged" id="jzb-2O-Dw7"/>
-                                        </connections>
-                                    </segmentedControl>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="jaP-D2-yJL">
-                                        <rect key="frame" x="330" y="8" width="117" height="41"/>
-                                        <constraints>
-                                            <constraint firstAttribute="height" constant="41" id="nby-a8-xYf"/>
-                                        </constraints>
-                                        <state key="normal" title="Start Record">
-                                            <color key="titleShadowColor" red="0.5" green="0.5" blue="0.5" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                        </state>
-                                        <connections>
-                                            <action selector="recordAction:" destination="Y5h-KL-TjC" eventType="touchUpInside" id="I3i-uj-bhM"/>
-                                        </connections>
-                                    </button>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="lgV-S3-wDx">
-                                        <rect key="frame" x="89" y="8" width="128" height="41"/>
-                                        <constraints>
-                                            <constraint firstAttribute="width" constant="128" id="U1X-dm-L8Q"/>
-                                            <constraint firstAttribute="height" constant="41" id="nPq-D9-sRm"/>
-                                        </constraints>
-                                        <state key="normal" title="Capture">
-                                            <color key="titleShadowColor" red="0.5" green="0.5" blue="0.5" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                        </state>
-                                        <connections>
-                                            <action selector="captureAction:" destination="Y5h-KL-TjC" eventType="touchUpInside" id="sl3-3F-qVr"/>
-                                        </connections>
-                                    </button>
-                                </subviews>
-                                <color key="backgroundColor" red="0.66666666669999997" green="0.66666666669999997" blue="0.66666666669999997" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                <constraints>
-                                    <constraint firstItem="hfh-HM-hBW" firstAttribute="leading" secondItem="jaP-D2-yJL" secondAttribute="trailing" constant="35" id="2DG-fJ-SKc">
-                                        <variation key="widthClass=compact" constant="179"/>
-                                        <variation key="heightClass=compact-widthClass=compact" constant="67"/>
-                                    </constraint>
-                                    <constraint firstAttribute="height" constant="57" id="B1Q-nK-9SU"/>
-                                    <constraint firstItem="hfh-HM-hBW" firstAttribute="leading" secondItem="jaP-D2-yJL" secondAttribute="trailing" constant="168" id="F5p-TN-hXg"/>
-                                    <constraint firstItem="jaP-D2-yJL" firstAttribute="top" secondItem="Nm0-qQ-Lf7" secondAttribute="top" constant="8" id="KEg-wm-f6R"/>
-                                    <constraint firstItem="hfh-HM-hBW" firstAttribute="top" secondItem="Nm0-qQ-Lf7" secondAttribute="top" constant="15" id="pLX-z7-2xT"/>
-                                    <constraint firstItem="jaP-D2-yJL" firstAttribute="leading" secondItem="lgV-S3-wDx" secondAttribute="trailing" priority="500" constant="113" id="qBA-uy-aL2">
-                                        <variation key="widthClass=compact" constant="59"/>
-                                        <variation key="heightClass=compact-widthClass=compact" constant="29"/>
-                                    </constraint>
-                                    <constraint firstItem="lgV-S3-wDx" firstAttribute="top" secondItem="Nm0-qQ-Lf7" secondAttribute="top" constant="8" id="tcF-qh-TuC"/>
-                                    <constraint firstItem="lgV-S3-wDx" firstAttribute="leading" secondItem="Nm0-qQ-Lf7" secondAttribute="leading" priority="499" constant="89" id="te0-gJ-QKX">
-                                        <variation key="widthClass=compact" constant="53"/>
-                                    </constraint>
-                                    <constraint firstAttribute="trailing" secondItem="hfh-HM-hBW" secondAttribute="trailing" constant="52" id="yNK-Ky-hEg">
-                                        <variation key="widthClass=compact" constant="45"/>
-                                    </constraint>
-                                </constraints>
-                                <variation key="default">
-                                    <mask key="constraints">
-                                        <exclude reference="2DG-fJ-SKc"/>
-                                        <exclude reference="F5p-TN-hXg"/>
-                                    </mask>
-                                </variation>
-                                <variation key="widthClass=compact">
-                                    <mask key="constraints">
-                                        <include reference="2DG-fJ-SKc"/>
-                                    </mask>
-                                </variation>
-                                <variation key="widthClass=regular">
-                                    <mask key="constraints">
-                                        <include reference="F5p-TN-hXg"/>
-                                    </mask>
-                                </variation>
-                            </view>
                         </subviews>
                         <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.0" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
                             <constraint firstItem="e7o-PK-R6D" firstAttribute="leading" secondItem="AFE-JX-zxr" secondAttribute="leadingMargin" constant="-20" id="9qL-5F-qZb"/>
-                            <constraint firstItem="Nm0-qQ-Lf7" firstAttribute="leading" secondItem="AFE-JX-zxr" secondAttribute="leadingMargin" constant="-60" id="Cqp-wA-g8J"/>
                             <constraint firstItem="e7o-PK-R6D" firstAttribute="top" secondItem="oFq-A1-eWo" secondAttribute="bottom" constant="-20" id="DSj-OG-wWP"/>
                             <constraint firstAttribute="trailingMargin" secondItem="e7o-PK-R6D" secondAttribute="trailing" constant="-20" id="GnX-4y-paQ"/>
                             <constraint firstAttribute="trailingMargin" secondItem="WvS-Bv-OaZ" secondAttribute="trailing" constant="233" id="P7h-Rc-Lak"/>
                             <constraint firstItem="WvS-Bv-OaZ" firstAttribute="leading" secondItem="AFE-JX-zxr" secondAttribute="leadingMargin" constant="234" id="Z23-cu-uOF"/>
                             <constraint firstItem="eiZ-M7-BsQ" firstAttribute="top" secondItem="e7o-PK-R6D" secondAttribute="bottom" id="ZUo-e6-gE4"/>
                             <constraint firstItem="WvS-Bv-OaZ" firstAttribute="top" secondItem="oFq-A1-eWo" secondAttribute="bottom" constant="8" id="btL-2l-hje"/>
-                            <constraint firstAttribute="trailingMargin" secondItem="Nm0-qQ-Lf7" secondAttribute="trailing" constant="-20" id="fER-xM-U12"/>
-                            <constraint firstItem="eiZ-M7-BsQ" firstAttribute="top" secondItem="Nm0-qQ-Lf7" secondAttribute="bottom" id="p23-fR-GD9"/>
                         </constraints>
                     </view>
-                    <navigationItem key="navigationItem" id="J1c-zF-EhE"/>
+                    <navigationItem key="navigationItem" id="J1c-zF-EhE">
+                        <nil key="title"/>
+                        <button key="titleView" opaque="NO" contentMode="scaleToFill" ambiguous="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" id="jaP-D2-yJL">
+                            <rect key="frame" x="302" y="4" width="292" height="36"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <constraints>
+                                <constraint firstAttribute="height" constant="41" id="nby-a8-xYf"/>
+                            </constraints>
+                            <fontDescription key="fontDescription" type="system" pointSize="20"/>
+                            <state key="normal" title="No Rip Detected!! Not Recording!">
+                                <color key="titleColor" systemColor="systemRedColor"/>
+                                <color key="titleShadowColor" red="0.5" green="0.5" blue="0.5" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                            </state>
+                            <connections>
+                                <action selector="recordAction:" destination="Y5h-KL-TjC" eventType="touchUpInside" id="I3i-uj-bhM"/>
+                            </connections>
+                        </button>
+                    </navigationItem>
                     <connections>
-                        <outlet property="captureButton" destination="lgV-S3-wDx" id="g3v-wR-CIq"/>
                         <outlet property="fpvView" destination="e7o-PK-R6D" id="R78-59-cmA"/>
+                        <outlet property="overlayView" destination="fsT-Dz-H68" id="jVt-BB-yPl"/>
                         <outlet property="recordButton" destination="jaP-D2-yJL" id="9tP-s5-pa9"/>
                         <outlet property="recordTimeLabel" destination="WvS-Bv-OaZ" id="cHr-jx-t8k"/>
-                        <outlet property="workModeSegmentControl" destination="hfh-HM-hBW" id="PGc-bE-vMI"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="spR-T1-rIm" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -205,11 +143,11 @@
                         <rect key="frame" x="0.0" y="0.0" width="896" height="414"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="yRu-5l-c6u" customClass="PreviewView" customModule="ObjectDetection" customModuleProvider="target">
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="yRu-5l-c6u" customClass="PreviewView" customModule="DroneMLSwift" customModuleProvider="target">
                                 <rect key="frame" x="44" y="24" width="808" height="369"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             </view>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="9j1-sG-dRP" customClass="OverlayView" customModule="ObjectDetection" customModuleProvider="target">
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="9j1-sG-dRP" customClass="OverlayView" customModule="DroneMLSwift" customModuleProvider="target">
                                 <rect key="frame" x="44" y="24" width="808" height="369"/>
                                 <color key="backgroundColor" white="1" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             </view>
@@ -264,4 +202,9 @@
             <point key="canvasLocation" x="579" y="-52"/>
         </scene>
     </scenes>
+    <resources>
+        <systemColor name="systemRedColor">
+            <color red="1" green="0.23137254901960785" blue="0.18823529411764706" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </systemColor>
+    </resources>
 </document>
