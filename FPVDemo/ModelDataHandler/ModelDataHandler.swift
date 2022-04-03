@@ -49,6 +49,11 @@ enum MobileNetSSD {
   static let labelsInfo: FileInfo = (name: "labelmap", extension: "txt")
 }
 
+enum MobileNetSSDRip {
+  static let modelInfo: FileInfo = (name: "detect1", extension: "tflite")
+  static let labelsInfo: FileInfo = (name: "labelmap1", extension: "txt")
+}
+
 /// This class handles all data preprocessing and makes calls to run inference on a given frame
 /// by invoking the `Interpreter`. It then formats the inferences obtained and returns the top N
 /// results for a successful inference.

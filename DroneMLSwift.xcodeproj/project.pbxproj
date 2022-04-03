@@ -12,7 +12,11 @@
 		53223C3527F073FC0065E01C /* detect.tflite in Resources */ = {isa = PBXBuildFile; fileRef = 53223C3427F073FC0065E01C /* detect.tflite */; };
 		53223C3727F074050065E01C /* labelmap.txt in Resources */ = {isa = PBXBuildFile; fileRef = 53223C3627F074050065E01C /* labelmap.txt */; };
 		53223C3B27F077460065E01C /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53223C3A27F077460065E01C /* ViewController.swift */; };
-		53223C4127F1AE100065E01C /* RipViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53223C4027F1AE100065E01C /* RipViewController.swift */; };
+		53CACDBA27F56B9E00979AF9 /* car.png in Resources */ = {isa = PBXBuildFile; fileRef = 53CACDB927F56B9E00979AF9 /* car.png */; };
+		53CACDBE27F5AC1A00979AF9 /* rip.png in Resources */ = {isa = PBXBuildFile; fileRef = 53CACDBD27F5AC1A00979AF9 /* rip.png */; };
+		53CACDC027F5DA4500979AF9 /* FPVViewController1.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53CACDBF27F5DA4500979AF9 /* FPVViewController1.swift */; };
+		53CACDC327F5DCA000979AF9 /* labelmap1.txt in Resources */ = {isa = PBXBuildFile; fileRef = 53CACDC127F5DCA000979AF9 /* labelmap1.txt */; };
+		53CACDC427F5DCA000979AF9 /* detect1.tflite in Resources */ = {isa = PBXBuildFile; fileRef = 53CACDC227F5DCA000979AF9 /* detect1.tflite */; };
 		53F09FA027DD5D340054E5E7 /* ModelDataHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53F09F9F27DD5D340054E5E7 /* ModelDataHandler.swift */; };
 		53F09FA527DDEF6E0054E5E7 /* UIColorExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53F09FA227DDEF6E0054E5E7 /* UIColorExtension.swift */; };
 		53F09FA627DDEF6E0054E5E7 /* StringExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53F09FA327DDEF6E0054E5E7 /* StringExtension.swift */; };
@@ -33,7 +37,11 @@
 		53223C3427F073FC0065E01C /* detect.tflite */ = {isa = PBXFileReference; lastKnownFileType = file; path = detect.tflite; sourceTree = "<group>"; };
 		53223C3627F074050065E01C /* labelmap.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = labelmap.txt; sourceTree = "<group>"; };
 		53223C3A27F077460065E01C /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
-		53223C4027F1AE100065E01C /* RipViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RipViewController.swift; sourceTree = "<group>"; };
+		53CACDB927F56B9E00979AF9 /* car.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = car.png; sourceTree = "<group>"; };
+		53CACDBD27F5AC1A00979AF9 /* rip.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = rip.png; sourceTree = "<group>"; };
+		53CACDBF27F5DA4500979AF9 /* FPVViewController1.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FPVViewController1.swift; sourceTree = "<group>"; };
+		53CACDC127F5DCA000979AF9 /* labelmap1.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = labelmap1.txt; sourceTree = "<group>"; };
+		53CACDC227F5DCA000979AF9 /* detect1.tflite */ = {isa = PBXFileReference; lastKnownFileType = file; path = detect1.tflite; sourceTree = "<group>"; };
 		53F09F9F27DD5D340054E5E7 /* ModelDataHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModelDataHandler.swift; sourceTree = "<group>"; };
 		53F09FA227DDEF6E0054E5E7 /* UIColorExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIColorExtension.swift; sourceTree = "<group>"; };
 		53F09FA327DDEF6E0054E5E7 /* StringExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StringExtension.swift; sourceTree = "<group>"; };
@@ -67,9 +75,11 @@
 		53223C2D27F0710A0065E01C /* ViewControllers */ = {
 			isa = PBXGroup;
 			children = (
-				53223C4027F1AE100065E01C /* RipViewController.swift */,
+				53CACDBD27F5AC1A00979AF9 /* rip.png */,
 				A4FA8DE41F6BDD8000EBD60F /* FPVViewController.swift */,
+				53CACDB927F56B9E00979AF9 /* car.png */,
 				53223C3A27F077460065E01C /* ViewController.swift */,
+				53CACDBF27F5DA4500979AF9 /* FPVViewController1.swift */,
 			);
 			path = ViewControllers;
 			sourceTree = "<group>";
@@ -86,6 +96,8 @@
 		53223C3327F073C80065E01C /* Model */ = {
 			isa = PBXGroup;
 			children = (
+				53CACDC227F5DCA000979AF9 /* detect1.tflite */,
+				53CACDC127F5DCA000979AF9 /* labelmap1.txt */,
 				53223C3627F074050065E01C /* labelmap.txt */,
 				53223C3427F073FC0065E01C /* detect.tflite */,
 			);
@@ -237,6 +249,10 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				53CACDBE27F5AC1A00979AF9 /* rip.png in Resources */,
+				53CACDC427F5DCA000979AF9 /* detect1.tflite in Resources */,
+				53CACDBA27F56B9E00979AF9 /* car.png in Resources */,
+				53CACDC327F5DCA000979AF9 /* labelmap1.txt in Resources */,
 				53223C3527F073FC0065E01C /* detect.tflite in Resources */,
 				A4FA8DE91F6BDD8000EBD60F /* Main.storyboard in Resources */,
 				A4FA8DE81F6BDD8000EBD60F /* LaunchScreen.storyboard in Resources */,
@@ -299,12 +315,12 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				53CACDC027F5DA4500979AF9 /* FPVViewController1.swift in Sources */,
 				53223C3B27F077460065E01C /* ViewController.swift in Sources */,
 				A4FA8DE61F6BDD8000EBD60F /* AppDelegate.swift in Sources */,
 				A4FA8DEA1F6BDD8000EBD60F /* FPVViewController.swift in Sources */,
 				53223C3227F071F50065E01C /* PreviewView.swift in Sources */,
 				53223C3027F071B70065E01C /* CameraFeedManager.swift in Sources */,
-				53223C4127F1AE100065E01C /* RipViewController.swift in Sources */,
 				53FF154727E715B7003BDB60 /* OverlayView.swift in Sources */,
 				53F09FA627DDEF6E0054E5E7 /* StringExtension.swift in Sources */,
 				53F09FA027DD5D340054E5E7 /* ModelDataHandler.swift in Sources */,

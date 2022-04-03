@@ -15,10 +15,10 @@ class FPVViewController: UIViewController,  DJIVideoFeedListener, DJISDKManagerD
     
     let bridgeAppIP = "10.81.52.50"
     
+
+    @IBOutlet var countLabel: UILabel!
     @IBOutlet var recordTimeLabel: UILabel!
-    @IBOutlet var captureButton: UIButton!
     @IBOutlet var recordButton: UIButton!
-    @IBOutlet var workModeSegmentControl: UISegmentedControl!
     @IBOutlet var fpvView: PreviewView!
     @IBOutlet weak var overlayView: OverlayView!
     
@@ -27,6 +27,7 @@ class FPVViewController: UIViewController,  DJIVideoFeedListener, DJISDKManagerD
     private let edgeOffset: CGFloat = 2.0
     private let labelOffset: CGFloat = 10.0
 
+    var timer = Timer()
     // Holds the results at any time
     private var result: Result?
     // MARK: Controllers that manage functionality
@@ -44,6 +45,16 @@ class FPVViewController: UIViewController,  DJIVideoFeedListener, DJISDKManagerD
         recordTimeLabel.isHidden = true
     }
 
+    
+//    override func viewDidAppear(_ animated: Bool) {
+//        super.viewDidAppear(animated)
+//        let backgroundImage = UIImageView(frame: UIScreen.main.bounds)
+//        backgroundImage.image = UIImage(named: "car.png")
+//        backgroundImage.contentMode =  UIView.ContentMode.scaleToFill
+//        self.fpvView.insertSubview(backgroundImage, at: 0)
+//        self.imageML()
+//    }
+
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
     
@@ -56,34 +67,14 @@ class FPVViewController: UIViewController,  DJIVideoFeedListener, DJISDKManagerD
     
     func setupVideoPreviewer() {
         DJIVideoPreviewer.instance().setView(self.fpvView)
-        let product = DJISDKManager.product();
-        
-        //Use "SecondaryVideoFeed" if the DJI Product is A3, N3, Matrice 600, or Matrice 600 Pro, otherwise, use "primaryVideoFeed".
-        if ((product?.model == DJIAircraftModelNameA3)
-            || (product?.model == DJIAircraftModelNameN3)
-            || (product?.model == DJIAircraftModelNameMatrice600)
-            || (product?.model == DJIAircraftModelNameMatrice600Pro)) {
-            DJISDKManager.videoFeeder()?.secondaryVideoFeed.add(self, with: nil)
-        } else {
-            DJISDKManager.videoFeeder()?.primaryVideoFeed.add(self, with: nil)
-        }
+        DJISDKManager.videoFeeder()?.primaryVideoFeed.add(self, with: nil)
         DJIVideoPreviewer.instance().start()
         DJIVideoPreviewer.instance()?.frameControlHandler = self;
     }
     
     func resetVideoPreview() {
         DJIVideoPreviewer.instance().unSetView()
-        let product = DJISDKManager.product();
-        
-        //Use "SecondaryVideoFeed" if the DJI Product is A3, N3, Matrice 600, or Matrice 600 Pro, otherwise, use "primaryVideoFeed".
-        if ((product?.model == DJIAircraftModelNameA3)
-            || (product?.model == DJIAircraftModelNameN3)
-            || (product?.model == DJIAircraftModelNameMatrice600)
-            || (product?.model == DJIAircraftModelNameMatrice600Pro)) {
-            DJISDKManager.videoFeeder()?.secondaryVideoFeed.remove(self)
-        } else {
-            DJISDKManager.videoFeeder()?.primaryVideoFeed.remove(self)
-        }
+        DJISDKManager.videoFeeder()?.primaryVideoFeed.remove(self)
     }
     
     func fetchCamera() -> DJICamera? {
@@ -92,9 +83,6 @@ class FPVViewController: UIViewController,  DJIVideoFeedListener, DJISDKManagerD
         }
         if product is DJIAircraft {
             return (product as! DJIAircraft).camera
-        }
-        if product is DJIHandheld {
-            return (product as! DJIHandheld).camera
         }
         return nil
     }
@@ -153,12 +141,15 @@ class FPVViewController: UIViewController,  DJIVideoFeedListener, DJISDKManagerD
             }
         }
         
-        self.showAlertViewWithTitle(title:"Register App", withMessage: message)
+        //self.showAlertViewWithTitle(title:"Register App", withMessage: message)
     }
     
     func didUpdateDatabaseDownloadProgress(_ progress: Progress) {
         NSLog("Download database : \n%lld/%lld", progress.completedUnitCount, progress.totalUnitCount)
     }
+
+    //Fahim: Camera functions start here
+    
     
     // MARK: DJICameraDelegate Method
     func camera(_ camera: DJICamera, didUpdate cameraState: DJICameraSystemState) {
@@ -168,17 +159,40 @@ class FPVViewController: UIViewController,  DJIVideoFeedListener, DJISDKManagerD
         self.recordTimeLabel.text = formatSeconds(seconds: cameraState.currentVideoRecordingTimeInSeconds)
         
         if (self.isRecording == true) {
-            self.recordButton.setTitle("Stop Record", for: .normal)
+            self.recordButton.setTitle("Counting People and Recording!", for: .normal)
+            self.recordButton.setTitleColor(.systemGreen, for: .normal)
         } else {
-            self.recordButton.setTitle("Start Record", for: .normal)
+            self.recordButton.setTitle("Counting People!", for: .normal)
+            self.recordButton.setTitleColor(.systemRed, for: .normal)
         }
         
+        //Fahim - stopping recording autometically after certain time
+//        if (formatSeconds(seconds: cameraState.currentVideoRecordingTimeInSeconds) == "00:15"){
+//            camera.stopRecordVideo(completion: { (error) in
+//                if let _ = error {
+//                    NSLog("Stop Record Video Error: " + String(describing: error))
+//                }
+//            })
+//        }
+//
         //Update UISegmented Control's State
-        if (cameraState.mode == DJICameraMode.shootPhoto) {
-            self.workModeSegmentControl.selectedSegmentIndex = 0
-        } else {
-            self.workModeSegmentControl.selectedSegmentIndex = 1
-        }
+        
+        //Fahim - setting video record mode as default
+        camera.setMode(DJICameraMode.shootPhoto,  withCompletion: { (error) in
+            if let _ = error {
+                NSLog("Set RecordVideo Mode Error: " + String(describing: error))
+            }
+        })
+        
+        //let img = self.fpvView.asImage()
+        
+        //let renderer = UIGraphicsImageRenderer(size: fpvView.bounds.size)
+        //let img = renderer.image { ctx in fpvView.drawHierarchy(in: fpvView.bounds, afterScreenUpdates: true) }
+        //self.imageView.image = img
+        
+        //self.imageML()
+        self.timer = Timer.scheduledTimer(withTimeInterval: 10, repeats: true, block: { _ in self.imageML()})
+
     }
     
     // MARK: DJIVideoFeedListener Method
@@ -189,22 +203,139 @@ class FPVViewController: UIViewController,  DJIVideoFeedListener, DJISDKManagerD
         DJIVideoPreviewer.instance().push(videoBuffer, length: Int32(videoData.length))
     }
     
-    // MARK: IBAction Methods
-    @IBAction func captureAction(_ sender: UIButton) {
-        guard let camera = fetchCamera() else {
-            return
-        }
+    func imageML(){
+        //convert PreviewView to UIImage
+        //let image =  UIImage.init(view: fpvView)
+        //let img = self.fpvView.asImage()
+        //let img2 = UIImage(named:"car.png")
+        let renderer = UIGraphicsImageRenderer(size: fpvView.bounds.size)
+        let img = renderer.image { ctx in fpvView.drawHierarchy(in: fpvView.bounds, afterScreenUpdates: true) }
         
-        camera.setMode(DJICameraMode.shootPhoto, withCompletion: {(error) in
-            DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 1){
-                camera.startShootPhoto(completion: { (error) in
-                    if let _ = error {
-                        NSLog("Shoot Photo Error: " + String(describing: error))
-                    }
-                })
-            }
-        })
+        //let img1 = self.resizeImage(image: img, targetSize: CGSize(width: 200.0, height: 200.0))
+        //let img1 = img.resizeImageTo(size: CGSize(width: 300.0, height: 300.0))
+        
+        //self.imageView.image = img
+        //self.imageView2.image = img1
+        
+        //convert UIImage to CVPixelBuffer
+
+        let pixelbuffer: CVPixelBuffer? = buffer(from: img)
+        //let pixelbuffer: CVPixelBuffer? = buffer(from: img2!)
+        
+        self.runModel(onPixelBuffer: pixelbuffer!)
     }
+    
+    func buffer(from image: UIImage) -> CVPixelBuffer? {
+      let attrs = [kCVPixelBufferCGImageCompatibilityKey: kCFBooleanTrue, kCVPixelBufferCGBitmapContextCompatibilityKey: kCFBooleanTrue] as CFDictionary
+      var pixelBuffer : CVPixelBuffer?
+      let status = CVPixelBufferCreate(kCFAllocatorDefault, Int(image.size.width), Int(image.size.height), kCVPixelFormatType_32ARGB, attrs, &pixelBuffer)
+      guard (status == kCVReturnSuccess) else {
+        return nil
+      }
+
+      CVPixelBufferLockBaseAddress(pixelBuffer!, CVPixelBufferLockFlags(rawValue: 0))
+      let pixelData = CVPixelBufferGetBaseAddress(pixelBuffer!)
+
+      let rgbColorSpace = CGColorSpaceCreateDeviceRGB()
+      let context = CGContext(data: pixelData, width: Int(image.size.width), height: Int(image.size.height), bitsPerComponent: 8, bytesPerRow: CVPixelBufferGetBytesPerRow(pixelBuffer!), space: rgbColorSpace, bitmapInfo: CGImageAlphaInfo.noneSkipFirst.rawValue)
+
+      context?.translateBy(x: 0, y: image.size.height)
+      context?.scaleBy(x: 1.0, y: -1.0)
+
+      UIGraphicsPushContext(context!)
+      image.draw(in: CGRect(x: 0, y: 0, width: image.size.width, height: image.size.height))
+      UIGraphicsPopContext()
+      CVPixelBufferUnlockBaseAddress(pixelBuffer!, CVPixelBufferLockFlags(rawValue: 0))
+
+      return pixelBuffer
+    }
+    
+    /** This method runs the live camera pixelBuffer through tensorFlow to get the result.
+     */
+    @objc  func runModel(onPixelBuffer pixelBuffer: CVPixelBuffer) {
+
+      // Run the live camera pixelBuffer through tensorFlow to get the result
+
+      result = self.modelDataHandler?.runModel(onFrame: pixelBuffer)
+
+      guard let displayResult = result else {
+        return
+      }
+        //displayResult.inferences.count
+      self.countLabel.text = "Count: " + String(displayResult.inferences.count)
+
+      let width = CVPixelBufferGetWidth(pixelBuffer)
+      let height = CVPixelBufferGetHeight(pixelBuffer)
+
+      DispatchQueue.main.async {
+
+        //Draws the bounding boxes and displays class names and confidence scores.
+        self.drawAfterPerformingCalculations(onInferences: displayResult.inferences, withImageSize: CGSize(width: CGFloat(width), height: CGFloat(height)))
+      }
+    }
+    
+    /**
+     This method takes the results, translates the bounding box rects to the current view, draws the bounding boxes, classNames and confidence scores of inferences.
+     */
+    func drawAfterPerformingCalculations(onInferences inferences: [Inference], withImageSize imageSize:CGSize) {
+
+      self.overlayView.objectOverlays = []
+      self.overlayView.setNeedsDisplay()
+      //guard !inferences.isEmpty else {
+        //return
+      //}
+
+      var objectOverlays: [ObjectOverlay] = []
+      //let objectOverlayTest = ObjectOverlay(name: "Test", borderRect: CGRect(x: 100.0, y: 100.0, width: 200.0, height: 200.0), nameStringSize: CGSize(width: 90.0, height: 15.0), color: UIColor.red, font: self.displayFont)
+      //objectOverlays.append(objectOverlayTest)
+      
+      var count = 0
+      for inference in inferences {
+
+        // Translates bounding box rect to current view.
+        var convertedRect = inference.rect.applying(CGAffineTransform(scaleX: self.overlayView.bounds.size.width / imageSize.width, y: self.overlayView.bounds.size.height / imageSize.height))
+
+        if convertedRect.origin.x < 0 {
+          convertedRect.origin.x = self.edgeOffset
+        }
+
+        if convertedRect.origin.y < 0 {
+          convertedRect.origin.y = self.edgeOffset
+        }
+
+        if convertedRect.maxY > self.overlayView.bounds.maxY {
+          convertedRect.size.height = self.overlayView.bounds.maxY - convertedRect.origin.y - self.edgeOffset
+        }
+
+        if convertedRect.maxX > self.overlayView.bounds.maxX {
+          convertedRect.size.width = self.overlayView.bounds.maxX - convertedRect.origin.x - self.edgeOffset
+        }
+
+        let confidenceValue = Int(inference.confidence * 100.0)
+        let string = "\(inference.className)  (\(confidenceValue)%)"
+
+        let size = string.size(usingFont: self.displayFont)
+
+        let objectOverlay = ObjectOverlay(name: string, borderRect: convertedRect, nameStringSize: size, color: inference.displayColor, font: self.displayFont)
+
+          //if inference.className == "car" || inference.className == "person"{
+        objectOverlays.append(objectOverlay)
+          //}
+        count = count + 1
+      }
+
+      // Hands off drawing to the OverlayView
+      self.draw(objectOverlays: objectOverlays)
+      //self.countLabel.text = "Count: " + String(count)
+    }
+
+    /** Calls methods to update overlay view with detected bounding boxes and class names.
+     */
+    func draw(objectOverlays: [ObjectOverlay]) {
+      self.overlayView.objectOverlays = objectOverlays
+      self.overlayView.setNeedsDisplay()
+    }
+    
     
     @IBAction func recordAction(_ sender: UIButton) {
         guard let camera = fetchCamera() else {
@@ -226,26 +357,6 @@ class FPVViewController: UIViewController,  DJIVideoFeedListener, DJISDKManagerD
         }
     }
     
-    @IBAction func workModeSegmentChange(_ sender: UISegmentedControl) {
-        guard let camera = fetchCamera() else {
-            return
-        }
-        
-       if (sender.selectedSegmentIndex == 0) {
-            camera.setMode(DJICameraMode.shootPhoto,  withCompletion: { (error) in
-                if let _ = error {
-                    NSLog("Set ShootPhoto Mode Error: " + String(describing: error))
-                }
-            })
-            
-        } else if (sender.selectedSegmentIndex == 1) {
-            camera.setMode(DJICameraMode.recordVideo,  withCompletion: { (error) in
-                if let _ = error {
-                    NSLog("Set RecordVideo Mode Error: " + String(describing: error))
-                }
-            })
-        }
-    }
     
     // MARK: DJIVideoPreviewerFrameControlDelegate Method
     func parseDecodingAssistInfo(withBuffer buffer: UnsafeMutablePointer<UInt8>!, length: Int32, assistInfo: UnsafeMutablePointer<DJIDecodingAssistInfo>!) -> Bool {
@@ -273,81 +384,37 @@ class FPVViewController: UIViewController,  DJIVideoFeedListener, DJISDKManagerD
         DJISDKManager.videoFeeder()?.primaryVideoFeed.decodingDidFail()
     }
     
-//    @objc  func runModel(onPixelBuffer pixelBuffer: CVPixelBuffer) {
-//
-//      // Run the live camera pixelBuffer through tensorFlow to get the result
-//
-//      result = self.modelDataHandler?.runModel(onFrame: pixelBuffer)
-//
-//      guard let displayResult = result else {
-//        return
-//      }
-//
-//      let width = CVPixelBufferGetWidth(pixelBuffer)
-//      let height = CVPixelBufferGetHeight(pixelBuffer)
-//
-//      DispatchQueue.main.async {
-//
-//        // Draws the bounding boxes and displays class names and confidence scores.
-//        self.drawAfterPerformingCalculations(onInferences: displayResult.inferences, withImageSize: CGSize(width: CGFloat(width), height: CGFloat(height)))
-//      }
-//    }
-//    
-//    func drawAfterPerformingCalculations(onInferences inferences: [Inference], withImageSize imageSize:CGSize) {
-//
-//      self.overlayView.objectOverlays = []
-//      self.overlayView.setNeedsDisplay()
-//
-//      guard !inferences.isEmpty else {
-//        return
-//      }
-//
-//      var objectOverlays: [ObjectOverlay] = []
-//
-//      for inference in inferences {
-//
-//        // Translates bounding box rect to current view.
-//        var convertedRect = inference.rect.applying(CGAffineTransform(scaleX: self.fpvView.bounds.size.width / imageSize.width, y: self.fpvView.bounds.size.height / imageSize.height))
-//
-//        if convertedRect.origin.x < 0 {
-//          convertedRect.origin.x = self.edgeOffset
-//        }
-//
-//        if convertedRect.origin.y < 0 {
-//          convertedRect.origin.y = self.edgeOffset
-//        }
-//
-//        if convertedRect.maxY > self.overlayView.bounds.maxY {
-//          convertedRect.size.height = self.overlayView.bounds.maxY - convertedRect.origin.y - self.edgeOffset
-//        }
-//
-//        if convertedRect.maxX > self.overlayView.bounds.maxX {
-//          convertedRect.size.width = self.overlayView.bounds.maxX - convertedRect.origin.x - self.edgeOffset
-//        }
-//
-//        let confidenceValue = Int(inference.confidence * 100.0)
-//        let string = "\(inference.className)  (\(confidenceValue)%)"
-//
-//        let size = string.size(usingFont: self.displayFont)
-//
-//        let objectOverlay = ObjectOverlay(name: string, borderRect: convertedRect, nameStringSize: size, color: inference.displayColor, font: self.displayFont)
-//
-//          //if inference.className == "car" || inference.className == "person"{
-//        objectOverlays.append(objectOverlay)
-//          //}
-//      }
-//
-//      // Hands off drawing to the OverlayView
-//      self.draw(objectOverlays: objectOverlays)
-//
-//    }
-//    
-//    func draw(objectOverlays: [ObjectOverlay]) {
-//
-//      self.overlayView.objectOverlays = objectOverlays
-//      self.overlayView.setNeedsDisplay()
-//    }
-
 }
 
+extension PreviewView {
+
+    // Using a function since `var image` might conflict with an existing variable
+    // (like on `UIImageView`)
+    func asImage() -> UIImage {
+        if #available(iOS 10.0, *) {
+            let renderer = UIGraphicsImageRenderer(bounds: bounds)
+            return renderer.image { rendererContext in
+                layer.render(in: rendererContext.cgContext)
+            }
+        } else {
+            UIGraphicsBeginImageContext(self.frame.size)
+            self.layer.render(in:UIGraphicsGetCurrentContext()!)
+            let image = UIGraphicsGetImageFromCurrentImageContext()
+            UIGraphicsEndImageContext()
+            return UIImage(cgImage: image!.cgImage!)
+        }
+    }
+}
+
+extension UIImage {
+    
+    func resizeImageTo(size: CGSize) -> UIImage? {
+        
+        UIGraphicsBeginImageContextWithOptions(size, false, 0.0)
+        self.draw(in: CGRect(origin: CGPoint.zero, size: size))
+        let resizedImage = UIGraphicsGetImageFromCurrentImageContext()!
+        UIGraphicsEndImageContext()
+        return resizedImage
+    }
+}
 
