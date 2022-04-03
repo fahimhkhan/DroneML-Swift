@@ -20,6 +20,8 @@ class FPVViewController1: UIViewController,  DJIVideoFeedListener, DJISDKManager
     var isRecording : Bool!
     var isMLrunning : Bool = false
     
+    var sample = 0
+    
     let enableBridgeMode = false
     
     let bridgeAppIP = "10.81.52.50"
@@ -61,7 +63,12 @@ class FPVViewController1: UIViewController,  DJIVideoFeedListener, DJISDKManager
 //        backgroundImage.contentMode =  UIView.ContentMode.scaleToFill
 //        self.fpvView.insertSubview(backgroundImage, at: 0)
 //        self.imageML()
-        //fpvView.previewLayer.frame = view.bounds
+        fpvView.previewLayer.frame = view.bounds
+    }
+    
+    override func viewDidLayoutSubviews() {
+      super.viewDidLayoutSubviews()
+      fpvView.previewLayer.frame = view.bounds
     }
 
     override func viewWillDisappear(_ animated: Bool) {
@@ -176,7 +183,7 @@ class FPVViewController1: UIViewController,  DJIVideoFeedListener, DJISDKManager
         }
         
         //Fahim - stopping recording autometically after certain time
-        if (formatSeconds(seconds: cameraState.currentVideoRecordingTimeInSeconds) == "00:15"){
+        if (formatSeconds(seconds: cameraState.currentVideoRecordingTimeInSeconds) == "00:30"){
             camera.stopRecordVideo(completion: { (error) in
                 if let _ = error {
                     NSLog("Stop Record Video Error: " + String(describing: error))
@@ -201,14 +208,17 @@ class FPVViewController1: UIViewController,  DJIVideoFeedListener, DJISDKManager
         
         if (self.isMLrunning == true){
             //self.timer = Timer.scheduledTimer(withTimeInterval: 30, repeats: true, block: { _ in self.imageML()})
-            self.imageML()
+            if (sample % 10 == 0){
+                self.imageML()
+            }
             self.runMLBUtton.setTitle("Stop ML", for: .normal)
             self.runMLBUtton.setTitleColor(.systemGreen, for: .normal)
+            //self.isMLrunning = false
         } else{
             self.runMLBUtton.setTitle("Run ML", for: .normal)
             self.runMLBUtton.setTitleColor(.systemRed, for: .normal)
         }
-        
+        sample = sample + 1
         //self.imageML()
 
     }

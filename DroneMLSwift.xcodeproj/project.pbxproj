@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		530F08FE27F9CA9B00A7B2DD /* FPVViewController2.swift in Sources */ = {isa = PBXBuildFile; fileRef = 530F08FD27F9CA9B00A7B2DD /* FPVViewController2.swift */; };
 		53223C3027F071B70065E01C /* CameraFeedManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53223C2F27F071B70065E01C /* CameraFeedManager.swift */; };
 		53223C3227F071F50065E01C /* PreviewView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53223C3127F071F50065E01C /* PreviewView.swift */; };
 		53223C3527F073FC0065E01C /* detect.tflite in Resources */ = {isa = PBXBuildFile; fileRef = 53223C3427F073FC0065E01C /* detect.tflite */; };
@@ -32,6 +33,7 @@
 
 /* Begin PBXFileReference section */
 		2337660EE5B457B2F07A1FC7 /* Pods-FPVDemo.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-FPVDemo.release.xcconfig"; path = "Target Support Files/Pods-FPVDemo/Pods-FPVDemo.release.xcconfig"; sourceTree = "<group>"; };
+		530F08FD27F9CA9B00A7B2DD /* FPVViewController2.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FPVViewController2.swift; sourceTree = "<group>"; };
 		53223C2F27F071B70065E01C /* CameraFeedManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraFeedManager.swift; sourceTree = "<group>"; };
 		53223C3127F071F50065E01C /* PreviewView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreviewView.swift; sourceTree = "<group>"; };
 		53223C3427F073FC0065E01C /* detect.tflite */ = {isa = PBXFileReference; lastKnownFileType = file; path = detect.tflite; sourceTree = "<group>"; };
@@ -80,6 +82,7 @@
 				53CACDBF27F5DA4500979AF9 /* FPVViewController1.swift */,
 				53CACDB927F56B9E00979AF9 /* car.png */,
 				53223C3A27F077460065E01C /* ViewController.swift */,
+				530F08FD27F9CA9B00A7B2DD /* FPVViewController2.swift */,
 			);
 			path = ViewControllers;
 			sourceTree = "<group>";
@@ -319,6 +322,7 @@
 				53223C3B27F077460065E01C /* ViewController.swift in Sources */,
 				A4FA8DE61F6BDD8000EBD60F /* AppDelegate.swift in Sources */,
 				A4FA8DEA1F6BDD8000EBD60F /* FPVViewController.swift in Sources */,
+				530F08FE27F9CA9B00A7B2DD /* FPVViewController2.swift in Sources */,
 				53223C3227F071F50065E01C /* PreviewView.swift in Sources */,
 				53223C3027F071B70065E01C /* CameraFeedManager.swift in Sources */,
 				53FF154727E715B7003BDB60 /* OverlayView.swift in Sources */,

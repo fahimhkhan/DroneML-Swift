@@ -38,7 +38,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="IPQ-Xv-iWd">
-                                <rect key="frame" x="265" y="157" width="360" height="50"/>
+                                <rect key="frame" x="265" y="115" width="360" height="50"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="360" id="72L-Fd-Law"/>
                                     <constraint firstAttribute="height" constant="50" id="sWc-R2-IsR"/>
@@ -50,19 +50,16 @@
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Hbb-bT-LI3">
-                                <rect key="frame" x="265" y="82" width="360" height="50"/>
+                                <rect key="frame" x="265" y="40" width="360" height="50"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="50" id="21N-53-VG6"/>
                                     <constraint firstAttribute="width" constant="360" id="BY9-Dr-kXg"/>
                                 </constraints>
                                 <state key="normal" title="Button"/>
-                                <buttonConfiguration key="configuration" style="filled" title="Cam ML"/>
-                                <connections>
-                                    <segue destination="Ahj-CK-bO4" kind="show" id="n1u-Ee-09m"/>
-                                </connections>
+                                <buttonConfiguration key="configuration" style="filled" title="Drone ML for Object Detect"/>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="itS-yV-RAd">
-                                <rect key="frame" x="265" y="232" width="360" height="50"/>
+                                <rect key="frame" x="265" y="190" width="360" height="50"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="50" id="KW1-D7-UIE"/>
                                     <constraint firstAttribute="width" constant="360" id="skf-li-KcT"/>
@@ -73,17 +70,32 @@
                                     <segue destination="Y5h-KL-TjC" kind="show" id="MJ2-Xd-pEx"/>
                                 </connections>
                             </button>
+                            <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="87Y-ow-Fxe">
+                                <rect key="frame" x="265" y="268" width="360" height="50"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="50" id="OJo-cy-tXq"/>
+                                    <constraint firstAttribute="width" constant="360" id="xwz-rM-6ya"/>
+                                </constraints>
+                                <state key="normal" title="Button"/>
+                                <buttonConfiguration key="configuration" style="filled" title="Extra: Cam ML"/>
+                                <connections>
+                                    <segue destination="Ahj-CK-bO4" kind="show" id="6dj-2C-AWP"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
+                            <constraint firstItem="87Y-ow-Fxe" firstAttribute="leading" secondItem="WId-Vl-xvN" secondAttribute="leadingMargin" constant="205" id="32f-kI-pYP"/>
                             <constraint firstItem="itS-yV-RAd" firstAttribute="leading" secondItem="WId-Vl-xvN" secondAttribute="leadingMargin" constant="205" id="4l5-Yt-kiM"/>
                             <constraint firstItem="IPQ-Xv-iWd" firstAttribute="top" secondItem="Hbb-bT-LI3" secondAttribute="bottom" constant="25" id="FJp-Lq-yNu"/>
                             <constraint firstItem="itS-yV-RAd" firstAttribute="top" secondItem="IPQ-Xv-iWd" secondAttribute="bottom" constant="25" id="Nal-kR-cde"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="87Y-ow-Fxe" secondAttribute="trailing" constant="212" id="Nrt-xK-TvF"/>
+                            <constraint firstItem="87Y-ow-Fxe" firstAttribute="top" secondItem="itS-yV-RAd" secondAttribute="bottom" constant="25" id="Qx1-Cj-Vrc"/>
                             <constraint firstAttribute="trailingMargin" secondItem="itS-yV-RAd" secondAttribute="trailing" constant="212" id="Tzf-aP-9oC"/>
                             <constraint firstItem="Hbb-bT-LI3" firstAttribute="leading" secondItem="WId-Vl-xvN" secondAttribute="leadingMargin" constant="205" id="eL6-k7-83f"/>
                             <constraint firstAttribute="trailingMargin" secondItem="IPQ-Xv-iWd" secondAttribute="trailing" constant="212" id="kz8-MK-MXN"/>
                             <constraint firstAttribute="trailingMargin" secondItem="Hbb-bT-LI3" secondAttribute="trailing" constant="212" id="luN-ne-1zU"/>
-                            <constraint firstItem="Hbb-bT-LI3" firstAttribute="top" secondItem="cHa-KL-vGx" secondAttribute="bottom" constant="50" id="sr1-od-Twl"/>
+                            <constraint firstItem="Hbb-bT-LI3" firstAttribute="top" secondItem="cHa-KL-vGx" secondAttribute="bottom" constant="8" symbolic="YES" id="sr1-od-Twl"/>
                             <constraint firstItem="IPQ-Xv-iWd" firstAttribute="leading" secondItem="WId-Vl-xvN" secondAttribute="leadingMargin" constant="205" id="vvi-WK-MnL"/>
                         </constraints>
                     </view>
@@ -150,7 +162,7 @@
                     </view>
                     <navigationItem key="navigationItem" id="J1c-zF-EhE">
                         <nil key="title"/>
-                        <button key="titleView" opaque="NO" contentMode="scaleToFill" ambiguous="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" id="jaP-D2-yJL">
+                        <button key="titleView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" id="jaP-D2-yJL">
                             <rect key="frame" x="276" y="0.0" width="292" height="32"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <constraints>

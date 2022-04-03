@@ -1,4 +1,12 @@
 //
+//  FPVViewController2.swift
+//  DroneMLSwift
+//
+//  Created by Fahim Hasan Khan on 4/3/22.
+//  Copyright © 2022 DJI. All rights reserved.
+//
+
+//
 //  FPVViewController.swift
 //  iOS-FPVDemo-Swift
 //
@@ -7,7 +15,7 @@ import UIKit
 import DJISDK
 import DJIWidget
 
-class FPVViewController: UIViewController,  DJIVideoFeedListener, DJISDKManagerDelegate, DJICameraDelegate, DJIVideoPreviewerFrameControlDelegate {
+class FPVViewController2: UIViewController,  DJIVideoFeedListener, DJISDKManagerDelegate, DJICameraDelegate, DJIVideoPreviewerFrameControlDelegate {
     
     var isRecording : Bool!
     var isMLrunning : Bool = false
@@ -452,64 +460,3 @@ class FPVViewController: UIViewController,  DJIVideoFeedListener, DJISDKManagerD
     }
     
 }
-
-extension PreviewView {
-
-    // Using a function since `var image` might conflict with an existing variable
-    // (like on `UIImageView`)
-    func asImage() -> UIImage {
-        if #available(iOS 10.0, *) {
-            let renderer = UIGraphicsImageRenderer(bounds: bounds)
-            return renderer.image { rendererContext in
-                layer.render(in: rendererContext.cgContext)
-            }
-        } else {
-            UIGraphicsBeginImageContext(self.frame.size)
-            self.layer.render(in:UIGraphicsGetCurrentContext()!)
-            let image = UIGraphicsGetImageFromCurrentImageContext()
-            UIGraphicsEndImageContext()
-            return UIImage(cgImage: image!.cgImage!)
-        }
-    }
-}
-
-extension UIImage {
-    
-    func resizeImageTo(size: CGSize) -> UIImage? {
-        
-        UIGraphicsBeginImageContextWithOptions(size, false, 0.0)
-        self.draw(in: CGRect(origin: CGPoint.zero, size: size))
-        let resizedImage = UIGraphicsGetImageFromCurrentImageContext()!
-        UIGraphicsEndImageContext()
-        return resizedImage
-    }
-}
-
-//extension CVPixelBuffer {
-//    public static func from(_ data: Data, width: Int, height: Int, pixelFormat: OSType) -> CVPixelBuffer {
-//        data.withUnsafeBytes { buffer in
-//            var pixelBuffer: CVPixelBuffer!
-//
-//            let result = CVPixelBufferCreate(kCFAllocatorDefault, width, height, pixelFormat, nil, &pixelBuffer)
-//            guard result == kCVReturnSuccess else { fatalError() }
-//
-//            CVPixelBufferLockBaseAddress(pixelBuffer, [])
-//            defer { CVPixelBufferUnlockBaseAddress(pixelBuffer, []) }
-//
-//            var source = buffer.baseAddress!
-//
-//            for plane in 0 ..< CVPixelBufferGetPlaneCount(pixelBuffer) {
-//                let dest      = CVPixelBufferGetBaseAddressOfPlane(pixelBuffer, plane)
-//                let height      = CVPixelBufferGetHeightOfPlane(pixelBuffer, plane)
-//                let bytesPerRow = CVPixelBufferGetBytesPerRowOfPlane(pixelBuffer, plane)
-//                let planeSize = height * bytesPerRow
-//
-//                memcpy(dest, source, planeSize)
-//                source += planeSize
-//            }
-//
-//            return pixelBuffer
-//        }
-//    }
-//}
-
