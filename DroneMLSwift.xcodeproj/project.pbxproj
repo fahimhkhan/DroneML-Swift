@@ -77,9 +77,9 @@
 			children = (
 				53CACDBD27F5AC1A00979AF9 /* rip.png */,
 				A4FA8DE41F6BDD8000EBD60F /* FPVViewController.swift */,
+				53CACDBF27F5DA4500979AF9 /* FPVViewController1.swift */,
 				53CACDB927F56B9E00979AF9 /* car.png */,
 				53223C3A27F077460065E01C /* ViewController.swift */,
-				53CACDBF27F5DA4500979AF9 /* FPVViewController1.swift */,
 			);
 			path = ViewControllers;
 			sourceTree = "<group>";

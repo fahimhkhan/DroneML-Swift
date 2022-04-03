@@ -18,11 +18,13 @@ import DJIWidget
 class FPVViewController1: UIViewController,  DJIVideoFeedListener, DJISDKManagerDelegate, DJICameraDelegate, DJIVideoPreviewerFrameControlDelegate {
     
     var isRecording : Bool!
+    var isMLrunning : Bool = false
     
     let enableBridgeMode = false
     
     let bridgeAppIP = "10.81.52.50"
     
+    @IBOutlet var runMLBUtton: UIButton!
     @IBOutlet var imageView: UIImageView!
     @IBOutlet var recordTimeLabel: UILabel!
     @IBOutlet var recordButton: UIButton!
@@ -52,14 +54,15 @@ class FPVViewController1: UIViewController,  DJIVideoFeedListener, DJISDKManager
     }
 
     
-//    override func viewDidAppear(_ animated: Bool) {
-//        super.viewDidAppear(animated)
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
 //        let backgroundImage = UIImageView(frame: UIScreen.main.bounds)
 //        backgroundImage.image = UIImage(named: "car.png")
 //        backgroundImage.contentMode =  UIView.ContentMode.scaleToFill
 //        self.fpvView.insertSubview(backgroundImage, at: 0)
 //        self.imageML()
-//    }
+        //fpvView.previewLayer.frame = view.bounds
+    }
 
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
@@ -196,7 +199,17 @@ class FPVViewController1: UIViewController,  DJIVideoFeedListener, DJISDKManager
         //let img = renderer.image { ctx in fpvView.drawHierarchy(in: fpvView.bounds, afterScreenUpdates: true) }
         //self.imageView.image = img
         
-        self.imageML()
+        if (self.isMLrunning == true){
+            //self.timer = Timer.scheduledTimer(withTimeInterval: 30, repeats: true, block: { _ in self.imageML()})
+            self.imageML()
+            self.runMLBUtton.setTitle("Stop ML", for: .normal)
+            self.runMLBUtton.setTitleColor(.systemGreen, for: .normal)
+        } else{
+            self.runMLBUtton.setTitle("Run ML", for: .normal)
+            self.runMLBUtton.setTitleColor(.systemRed, for: .normal)
+        }
+        
+        //self.imageML()
 
     }
     
@@ -356,6 +369,16 @@ class FPVViewController1: UIViewController,  DJIVideoFeedListener, DJISDKManager
                     NSLog("Start Record Video Error: " + String(describing: error))
                 }
             })
+        }
+    }
+    
+    
+    @IBAction func runMLAction(_ sender: UIButton) {
+        if (self.isMLrunning == true){
+            isMLrunning = false
+        }
+        else{
+            isMLrunning = true
         }
     }
     

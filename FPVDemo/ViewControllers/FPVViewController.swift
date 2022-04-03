@@ -10,12 +10,16 @@ import DJIWidget
 class FPVViewController: UIViewController,  DJIVideoFeedListener, DJISDKManagerDelegate, DJICameraDelegate, DJIVideoPreviewerFrameControlDelegate {
     
     var isRecording : Bool!
+    var isMLrunning : Bool = false
+    
+    var temppixelbuffer: CVPixelBuffer!
     
     let enableBridgeMode = false
     
     let bridgeAppIP = "10.81.52.50"
     
 
+    @IBOutlet var runMLBUtton: UIButton!
     @IBOutlet var countLabel: UILabel!
     @IBOutlet var recordTimeLabel: UILabel!
     @IBOutlet var recordButton: UIButton!
@@ -46,14 +50,15 @@ class FPVViewController: UIViewController,  DJIVideoFeedListener, DJISDKManagerD
     }
 
     
-//    override func viewDidAppear(_ animated: Bool) {
-//        super.viewDidAppear(animated)
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
 //        let backgroundImage = UIImageView(frame: UIScreen.main.bounds)
 //        backgroundImage.image = UIImage(named: "car.png")
 //        backgroundImage.contentMode =  UIView.ContentMode.scaleToFill
 //        self.fpvView.insertSubview(backgroundImage, at: 0)
 //        self.imageML()
-//    }
+        //fpvView.previewLayer.frame = view.bounds
+    }
 
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
@@ -159,10 +164,10 @@ class FPVViewController: UIViewController,  DJIVideoFeedListener, DJISDKManagerD
         self.recordTimeLabel.text = formatSeconds(seconds: cameraState.currentVideoRecordingTimeInSeconds)
         
         if (self.isRecording == true) {
-            self.recordButton.setTitle("Counting People and Recording!", for: .normal)
+            self.recordButton.setTitle("Start Recording", for: .normal)
             self.recordButton.setTitleColor(.systemGreen, for: .normal)
         } else {
-            self.recordButton.setTitle("Counting People!", for: .normal)
+            self.recordButton.setTitle("Stop Recording", for: .normal)
             self.recordButton.setTitleColor(.systemRed, for: .normal)
         }
         
@@ -190,17 +195,54 @@ class FPVViewController: UIViewController,  DJIVideoFeedListener, DJISDKManagerD
         //let img = renderer.image { ctx in fpvView.drawHierarchy(in: fpvView.bounds, afterScreenUpdates: true) }
         //self.imageView.image = img
         
+        if (self.isMLrunning == true){
+            //self.timer = Timer.scheduledTimer(withTimeInterval: 30, repeats: true, block: { _ in self.imageML()})
+            self.imageML()
+            self.runMLBUtton.setTitle("Stop ML", for: .normal)
+            self.runMLBUtton.setTitleColor(.systemGreen, for: .normal)
+        } else{
+            self.runMLBUtton.setTitle("Run ML", for: .normal)
+            self.runMLBUtton.setTitleColor(.systemRed, for: .normal)
+        }
         //self.imageML()
-        self.timer = Timer.scheduledTimer(withTimeInterval: 10, repeats: true, block: { _ in self.imageML()})
+        //self.timer = Timer.scheduledTimer(withTimeInterval: 10, repeats: true, block: { _ in self.imageML()})
 
     }
     
     // MARK: DJIVideoFeedListener Method
     func videoFeed(_ videoFeed: DJIVideoFeed, didUpdateVideoData rawData: Data) {
+        self.temppixelbuffer = fromData(rawData, width: 1280, height: 720, pixelFormat: kCVPixelFormatType_32ARGB)
+        
         let videoData = rawData as NSData
         let videoBuffer = UnsafeMutablePointer<UInt8>.allocate(capacity: videoData.length)
         videoData.getBytes(videoBuffer, length: videoData.length)
         DJIVideoPreviewer.instance().push(videoBuffer, length: Int32(videoData.length))
+    }
+    
+    func fromData(_ data: Data, width: Int, height: Int, pixelFormat: OSType) -> CVPixelBuffer {
+        data.withUnsafeBytes { buffer in
+            var pixelBuffer: CVPixelBuffer!
+
+            let result = CVPixelBufferCreate(kCFAllocatorDefault, width, height, pixelFormat, nil, &pixelBuffer)
+            guard result == kCVReturnSuccess else { fatalError() }
+
+            CVPixelBufferLockBaseAddress(pixelBuffer, [])
+            defer { CVPixelBufferUnlockBaseAddress(pixelBuffer, []) }
+
+            var source = buffer.baseAddress!
+
+            for plane in 0 ..< CVPixelBufferGetPlaneCount(pixelBuffer) {
+                let dest      = CVPixelBufferGetBaseAddressOfPlane(pixelBuffer, plane)
+                let height      = CVPixelBufferGetHeightOfPlane(pixelBuffer, plane)
+                let bytesPerRow = CVPixelBufferGetBytesPerRowOfPlane(pixelBuffer, plane)
+                let planeSize = height * bytesPerRow
+
+                memcpy(dest, source, planeSize)
+                source += planeSize
+            }
+
+            return pixelBuffer
+        }
     }
     
     func imageML(){
@@ -223,6 +265,7 @@ class FPVViewController: UIViewController,  DJIVideoFeedListener, DJISDKManagerD
         //let pixelbuffer: CVPixelBuffer? = buffer(from: img2!)
         
         self.runModel(onPixelBuffer: pixelbuffer!)
+        //self.runModel(onPixelBuffer: temppixelbuffer)
     }
     
     func buffer(from image: UIImage) -> CVPixelBuffer? {
@@ -337,6 +380,7 @@ class FPVViewController: UIViewController,  DJIVideoFeedListener, DJISDKManagerD
     }
     
     
+    
     @IBAction func recordAction(_ sender: UIButton) {
         guard let camera = fetchCamera() else {
             return
@@ -354,6 +398,16 @@ class FPVViewController: UIViewController,  DJIVideoFeedListener, DJISDKManagerD
                     NSLog("Start Record Video Error: " + String(describing: error))
                 }
             })
+        }
+    }
+    
+    
+    @IBAction func runMLAction(_ sender: UIButton) {
+        if (self.isMLrunning == true){
+            isMLrunning = false
+        }
+        else{
+            isMLrunning = true
         }
     }
     
@@ -417,4 +471,32 @@ extension UIImage {
         return resizedImage
     }
 }
+
+//extension CVPixelBuffer {
+//    public static func from(_ data: Data, width: Int, height: Int, pixelFormat: OSType) -> CVPixelBuffer {
+//        data.withUnsafeBytes { buffer in
+//            var pixelBuffer: CVPixelBuffer!
+//
+//            let result = CVPixelBufferCreate(kCFAllocatorDefault, width, height, pixelFormat, nil, &pixelBuffer)
+//            guard result == kCVReturnSuccess else { fatalError() }
+//
+//            CVPixelBufferLockBaseAddress(pixelBuffer, [])
+//            defer { CVPixelBufferUnlockBaseAddress(pixelBuffer, []) }
+//
+//            var source = buffer.baseAddress!
+//
+//            for plane in 0 ..< CVPixelBufferGetPlaneCount(pixelBuffer) {
+//                let dest      = CVPixelBufferGetBaseAddressOfPlane(pixelBuffer, plane)
+//                let height      = CVPixelBufferGetHeightOfPlane(pixelBuffer, plane)
+//                let bytesPerRow = CVPixelBufferGetBytesPerRowOfPlane(pixelBuffer, plane)
+//                let planeSize = height * bytesPerRow
+//
+//                memcpy(dest, source, planeSize)
+//                source += planeSize
+//            }
+//
+//            return pixelBuffer
+//        }
+//    }
+//}
 
