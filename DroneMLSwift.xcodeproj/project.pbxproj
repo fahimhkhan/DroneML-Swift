@@ -77,12 +77,12 @@
 		53223C2D27F0710A0065E01C /* ViewControllers */ = {
 			isa = PBXGroup;
 			children = (
-				53CACDBD27F5AC1A00979AF9 /* rip.png */,
 				A4FA8DE41F6BDD8000EBD60F /* FPVViewController.swift */,
 				53CACDBF27F5DA4500979AF9 /* FPVViewController1.swift */,
-				53CACDB927F56B9E00979AF9 /* car.png */,
-				53223C3A27F077460065E01C /* ViewController.swift */,
 				530F08FD27F9CA9B00A7B2DD /* FPVViewController2.swift */,
+				53223C3A27F077460065E01C /* ViewController.swift */,
+				53CACDBD27F5AC1A00979AF9 /* rip.png */,
+				53CACDB927F56B9E00979AF9 /* car.png */,
 			);
 			path = ViewControllers;
 			sourceTree = "<group>";

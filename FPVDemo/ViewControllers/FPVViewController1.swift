@@ -19,6 +19,7 @@ class FPVViewController1: UIViewController,  DJIVideoFeedListener, DJISDKManager
     
     var isRecording : Bool!
     var isMLrunning : Bool = false
+    var isDetected : Bool = false
     
     var sample = 0
     
@@ -180,6 +181,16 @@ class FPVViewController1: UIViewController,  DJIVideoFeedListener, DJISDKManager
         } else {
             self.recordButton.setTitle("No Rip Detected!! Not Recording!", for: .normal)
             self.recordButton.setTitleColor(.systemRed, for: .normal)
+        }
+        
+        //Fahim - start recording autometically if Object of interest is detected
+        if (self.isDetected == true && self.isRecording == false){
+            camera.startRecordVideo(completion: { (error) in
+                if let _ = error {
+                    NSLog("Start Record Video Error: " + String(describing: error))
+                }
+            })
+            self.isDetected = false
         }
         
         //Fahim - stopping recording autometically after certain time
@@ -346,6 +357,7 @@ class FPVViewController1: UIViewController,  DJIVideoFeedListener, DJISDKManager
 
           //if inference.className == "car" || inference.className == "person"{
         objectOverlays.append(objectOverlay)
+        self.isDetected = true
           //}
       }
 

@@ -36,6 +36,7 @@ class FPVViewController2: UIViewController,  DJIVideoFeedListener, DJISDKManager
     @IBOutlet var recordButton: UIButton!
     @IBOutlet var fpvView: PreviewView!
     @IBOutlet weak var overlayView: OverlayView!
+    @IBOutlet var sampleLabel: UILabel!
     
     // MARK: Constants
     private let displayFont = UIFont.systemFont(ofSize: 14.0, weight: .medium)
@@ -178,7 +179,7 @@ class FPVViewController2: UIViewController,  DJIVideoFeedListener, DJISDKManager
         self.recordTimeLabel.isHidden = !self.isRecording
         
         self.recordTimeLabel.text = formatSeconds(seconds: cameraState.currentVideoRecordingTimeInSeconds)
-        //self.recordTimeLabel.text = String(count)
+        self.sampleLabel.text = String(sample)
         
         if (self.isRecording == true) {
             self.recordButton.setTitle("Stop Recording", for: .normal)
@@ -189,13 +190,13 @@ class FPVViewController2: UIViewController,  DJIVideoFeedListener, DJISDKManager
         }
         
         //Fahim - stopping recording autometically after certain time
-        if (formatSeconds(seconds: cameraState.currentVideoRecordingTimeInSeconds) == "00:15"){
-            camera.stopRecordVideo(completion: { (error) in
-                if let _ = error {
-                    NSLog("Stop Record Video Error: " + String(describing: error))
-                }
-            })
-        }
+//        if (formatSeconds(seconds: cameraState.currentVideoRecordingTimeInSeconds) == "00:15"){
+//            camera.stopRecordVideo(completion: { (error) in
+//                if let _ = error {
+//                    NSLog("Stop Record Video Error: " + String(describing: error))
+//                }
+//            })
+//        }
 
         //Update UISegmented Control's State
         
@@ -325,7 +326,7 @@ class FPVViewController2: UIViewController,  DJIVideoFeedListener, DJISDKManager
         return
       }
         //displayResult.inferences.count
-      self.countLabel.text = "Count: " + String(displayResult.inferences.count)
+      self.countLabel.text = " Object Counted: " + String(displayResult.inferences.count)
 
       let width = CVPixelBufferGetWidth(pixelBuffer)
       let height = CVPixelBufferGetHeight(pixelBuffer)
@@ -352,7 +353,6 @@ class FPVViewController2: UIViewController,  DJIVideoFeedListener, DJISDKManager
       //let objectOverlayTest = ObjectOverlay(name: "Test", borderRect: CGRect(x: 100.0, y: 100.0, width: 200.0, height: 200.0), nameStringSize: CGSize(width: 90.0, height: 15.0), color: UIColor.red, font: self.displayFont)
       //objectOverlays.append(objectOverlayTest)
       
-      var count = 0
       for inference in inferences {
 
         // Translates bounding box rect to current view.
@@ -382,15 +382,12 @@ class FPVViewController2: UIViewController,  DJIVideoFeedListener, DJISDKManager
         let objectOverlay = ObjectOverlay(name: string, borderRect: convertedRect, nameStringSize: size, color: inference.displayColor, font: self.displayFont)
 
         //if inference.className == "car" || inference.className == "person"{
-        if inference.className == "person"{
             objectOverlays.append(objectOverlay)
-            count = count + 1
-        }
+        //}
       }
 
       // Hands off drawing to the OverlayView
       self.draw(objectOverlays: objectOverlays)
-      //self.countLabel.text = "Count: " + String(count)
     }
 
     /** Calls methods to update overlay view with detected bounding boxes and class names.

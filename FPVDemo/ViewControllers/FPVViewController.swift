@@ -34,7 +34,6 @@ class FPVViewController: UIViewController,  DJIVideoFeedListener, DJISDKManagerD
     private let edgeOffset: CGFloat = 2.0
     private let labelOffset: CGFloat = 10.0
 
-    var timer = Timer()
     // Holds the results at any time
     private var result: Result?
     // MARK: Controllers that manage functionality
@@ -180,6 +179,18 @@ class FPVViewController: UIViewController,  DJIVideoFeedListener, DJISDKManagerD
             self.recordButton.setTitleColor(.systemRed, for: .normal)
         }
         
+        
+        //Fahim - start recording autometically if Object of interest is detected
+        if (self.isDetected == true && self.isRecording == false){
+            camera.startRecordVideo(completion: { (error) in
+                if let _ = error {
+                    NSLog("Start Record Video Error: " + String(describing: error))
+                }
+            })
+            self.isDetected = false
+        }
+        
+        
         //Fahim - stopping recording autometically after certain time
         if (formatSeconds(seconds: cameraState.currentVideoRecordingTimeInSeconds) == "00:15"){
             camera.stopRecordVideo(completion: { (error) in
@@ -317,7 +328,7 @@ class FPVViewController: UIViewController,  DJIVideoFeedListener, DJISDKManagerD
         return
       }
         //displayResult.inferences.count
-      self.countLabel.text = "Count: " + String(displayResult.inferences.count)
+      //self.countLabel.text = " Person Counted: " + String((displayResult.inferences.count) - 1)
 
       let width = CVPixelBufferGetWidth(pixelBuffer)
       let height = CVPixelBufferGetHeight(pixelBuffer)
@@ -373,16 +384,17 @@ class FPVViewController: UIViewController,  DJIVideoFeedListener, DJISDKManagerD
 
         let objectOverlay = ObjectOverlay(name: string, borderRect: convertedRect, nameStringSize: size, color: inference.displayColor, font: self.displayFont)
 
-        //if inference.className == "car" || inference.className == "person"{
-        if inference.className == "person"{
+        //if inference.className == "car" || inference.className == "person" {
+        if inference.className == "person" {
             objectOverlays.append(objectOverlay)
-            count = count + 1
+            count += count + 1
+            self.isDetected = true
         }
       }
 
       // Hands off drawing to the OverlayView
       self.draw(objectOverlays: objectOverlays)
-      //self.countLabel.text = "Count: " + String(count)
+      self.countLabel.text = " Person Counted: " + String(count)
     }
 
     /** Calls methods to update overlay view with detected bounding boxes and class names.
@@ -453,37 +465,37 @@ class FPVViewController: UIViewController,  DJIVideoFeedListener, DJISDKManagerD
     
 }
 
-extension PreviewView {
-
-    // Using a function since `var image` might conflict with an existing variable
-    // (like on `UIImageView`)
-    func asImage() -> UIImage {
-        if #available(iOS 10.0, *) {
-            let renderer = UIGraphicsImageRenderer(bounds: bounds)
-            return renderer.image { rendererContext in
-                layer.render(in: rendererContext.cgContext)
-            }
-        } else {
-            UIGraphicsBeginImageContext(self.frame.size)
-            self.layer.render(in:UIGraphicsGetCurrentContext()!)
-            let image = UIGraphicsGetImageFromCurrentImageContext()
-            UIGraphicsEndImageContext()
-            return UIImage(cgImage: image!.cgImage!)
-        }
-    }
-}
-
-extension UIImage {
-    
-    func resizeImageTo(size: CGSize) -> UIImage? {
-        
-        UIGraphicsBeginImageContextWithOptions(size, false, 0.0)
-        self.draw(in: CGRect(origin: CGPoint.zero, size: size))
-        let resizedImage = UIGraphicsGetImageFromCurrentImageContext()!
-        UIGraphicsEndImageContext()
-        return resizedImage
-    }
-}
+//extension PreviewView {
+//
+//    // Using a function since `var image` might conflict with an existing variable
+//    // (like on `UIImageView`)
+//    func asImage() -> UIImage {
+//        if #available(iOS 10.0, *) {
+//            let renderer = UIGraphicsImageRenderer(bounds: bounds)
+//            return renderer.image { rendererContext in
+//                layer.render(in: rendererContext.cgContext)
+//            }
+//        } else {
+//            UIGraphicsBeginImageContext(self.frame.size)
+//            self.layer.render(in:UIGraphicsGetCurrentContext()!)
+//            let image = UIGraphicsGetImageFromCurrentImageContext()
+//            UIGraphicsEndImageContext()
+//            return UIImage(cgImage: image!.cgImage!)
+//        }
+//    }
+//}
+//
+//extension UIImage {
+//
+//    func resizeImageTo(size: CGSize) -> UIImage? {
+//
+//        UIGraphicsBeginImageContextWithOptions(size, false, 0.0)
+//        self.draw(in: CGRect(origin: CGPoint.zero, size: size))
+//        let resizedImage = UIGraphicsGetImageFromCurrentImageContext()!
+//        UIGraphicsEndImageContext()
+//        return resizedImage
+//    }
+//}
 
 //extension CVPixelBuffer {
 //    public static func from(_ data: Data, width: Int, height: Int, pixelFormat: OSType) -> CVPixelBuffer {
